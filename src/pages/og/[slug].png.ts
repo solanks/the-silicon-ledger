@@ -26,10 +26,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     {
       params: { slug: 'default' },
       props: {
-        title: 'TechPulse Labs: Deep-Dive Silicon & Hardware Benchmarks',
+        title: 'The Silicon Ledger: Deep-Dive Silicon & Hardware Benchmarks',
         subtitle: 'Independent Telemetry, Spec Matrices & Architecture Reviews',
         category: 'Hardware Lab',
-        authorName: 'TechPulse Editorial Team',
+        authorName: 'The Silicon Ledger Desk',
         authorRole: 'Hardware Testing Lab',
         pubDate: '2026-11-13',
         score: 9.5,
@@ -41,42 +41,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const GET: APIRoute = async ({ props }) => {
   const svg = buildHighContrastOgSvg({
-    title: props.title,
-    subtitle: props.subtitle,
-    category: props.category,
-    authorName: props.authorName,
-    authorRole: props.authorRole,
-    pubDate: props.pubDate,
-    score: props.score,
-    award: props.award
+    title: props.title as string,
+    subtitle: props.subtitle as string | undefined,
+    category: props.category as string,
+    authorName: props.authorName as string,
+    authorRole: props.authorRole as string,
+    pubDate: props.pubDate as string,
+    score: props.score as number,
+    award: props.award as string | undefined
   });
 
-  try {
-    const { Resvg } = await import('@resvg/resvg-js');
-    const resvg = new Resvg(svg, {
-      fitTo: {
-        mode: 'width',
-        value: 1200
-      }
-    });
-    const pngData = resvg.render();
-    const pngBuffer = pngData.asPng();
-
-    return new Response(pngBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'image/png',
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
-    });
-  } catch {
-    // Graceful fallback if @resvg/resvg-js binary isn't available in the environment
-    return new Response(svg, {
-      status: 200,
-      headers: {
-        'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
-    });
-  }
+  return new Response(svg, {
+    status: 200,
+    headers: {
+      'Content-Type': 'image/svg+xml',
+      'Cache-Control': 'public, max-age=31536000, immutable'
+    }
+  });
 };

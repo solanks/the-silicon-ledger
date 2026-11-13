@@ -24,14 +24,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const GET: APIRoute = async ({ props }) => {
   const svg = buildHighContrastOgSvg({
-    title: props.title,
-    subtitle: props.subtitle,
-    category: props.category,
-    authorName: props.authorName,
-    authorRole: props.authorRole,
-    pubDate: props.pubDate,
-    score: props.score,
-    award: props.award
+    title: props.title as string,
+    subtitle: props.subtitle as string | undefined,
+    category: props.category as string,
+    authorName: props.authorName as string,
+    authorRole: props.authorRole as string,
+    pubDate: props.pubDate as string,
+    score: props.score as number,
+    award: props.award as string | undefined
   });
 
   return new Response(svg, {

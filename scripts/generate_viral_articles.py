@@ -55,7 +55,7 @@ RULES FOR ARTICLE FRONTMATTER & BODY (MDX Format):
 - Include `poll` in frontmatter for the Above-the-Fold Polarized 2-Option Reader Poll.
 - Keep paragraphs under 3 sentences. White space forces scrolling, which loads more display ads.
 - Open with a bold 2-sentence hook that validates the reader's skepticism.
-- Insert `<!-- AD_SLOT -->` markers after every 3rd paragraph.
+- Do NOT use HTML comments (`<!-- ... -->`) inside `.mdx` files (MDX v3 uses JSX); our Rehype AST plugin automatically injects an ad slot after every 3rd paragraph.
 - Import and embed all four signature retention & twist components inside the MDX body:
   1. `import MarketingTranslatorBox from '../../components/MarketingTranslatorBox.astro';` ("Marketing BS vs. Reality" Translator Box)
   2. `import UpgradeCalculator from '../../components/UpgradeCalculator.astro';` ("Should You Upgrade? Calculator" scroll-trap next to high-CPM ad)

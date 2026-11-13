@@ -6,7 +6,7 @@ import { rehypeInjectAds } from './src/plugins/rehype-inject-ads.mjs';
 
 export default defineConfig({
   site: 'https://the-silicon-ledger.netlify.app',
-  output: 'hybrid',
+  output: 'static',
   markdown: {
     rehypePlugins: [[rehypeInjectAds, { interval: 3 }]]
   },
