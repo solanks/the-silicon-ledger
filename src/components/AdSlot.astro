@@ -1,0 +1,93 @@
+---
+export interface Props {
+  slotId: string;
+  placement: 'leaderboard' | 'sidebar-sticky' | 'in-content' | 'footer-sticky';
+  format?: string;
+  minHeight?: string;
+  label?: string;
+}
+
+const {
+  slotId,
+  placement,
+  format = placement === 'sidebar-sticky'
+    ? '300×600 Half-Page / 300×250 (30s Refresh)'
+    : placement === 'leaderboard'
+      ? '970×90 / 728×90 Broadsheet Leaderboard'
+      : placement === 'footer-sticky'
+        ? '728×90 / 320×50 Adhesion Unit (30s Refresh)'
+        : '300×250 / Outstream Video Fluid (30s Refresh)',
+  minHeight = placement === 'sidebar-sticky'
+    ? 'min-h-[600px]'
+    : placement === 'leaderboard'
+      ? 'min-h-[90px] sm:min-h-[105px]'
+      : placement === 'footer-sticky'
+        ? 'min-h-[58px]'
+        : 'min-h-[250px]',
+  label = placement === 'sidebar-sticky'
+    ? 'Sticky Rail Advertisement'
+    : placement === 'leaderboard'
+      ? 'Top Display Unit'
+      : placement === 'footer-sticky'
+        ? 'Footer Adhesion Unit'
+        : 'In-Column Display Unit'
+} = Astro.props;
+---
+
+<aside
+  class="ad-slot-wrapper not-prose w-full border border-stone-400 bg-[#EFECE4] p-3"
+  data-ad-slot={slotId}
+  data-ad-placement={placement}
+  data-refresh-interval="30"
+  aria-label={`Advertisement: ${label}`}
+>
+  <div
+    class="mb-2 flex flex-wrap items-center justify-between gap-2 border-b border-stone-300 pb-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-stone-600"
+  >
+    <span>Advertisement · {label}</span>
+    <div class="flex items-center gap-2">
+      <span
+        class="ad-refresh-badge border border-stone-400 bg-[#F7F4EE] px-2 py-0.5 font-mono text-[10px] text-stone-700"
+      >
+        ↻ Refresh #0 (30s)
+      </span>
+      <span
+        class="ad-viewability-badge border border-amber-700 bg-amber-50 px-2 py-0.5 font-mono text-[10px] text-amber-900"
+        data-viewability-status="pending"
+      >
+        IAB: Pending…
+      </span>
+    </div>
+  </div>
+
+  <div
+    class:list={[
+      'ad-unit-box relative flex w-full flex-col items-center justify-center border border-dashed border-stone-400 bg-[#F7F4EE] p-4 text-center transition-all duration-300',
+      minHeight
+    ]}
+  >
+    <div
+      class="mb-1.5 border border-[#141413] bg-[#EFECE4] px-3 py-1 font-mono text-xs font-bold text-[#141413]"
+    >
+      Slot: {slotId} · {format}
+    </div>
+    {
+      placement !== 'footer-sticky' && (
+        <p class="max-w-xs font-sans text-xs leading-relaxed text-stone-600">
+          {placement === 'sidebar-sticky'
+            ? 'Reserved 300×600 sticky rail container (CLS = 0.00) with 30-second Active View refresh.'
+            : 'CLS-reserved display/video slot with IntersectionObserver lazy loading.'}
+        </p>
+      )
+    }
+    <div
+      class="mt-2.5 flex flex-wrap items-center justify-center gap-3 border border-stone-300 bg-white px-3 py-1 font-mono text-[11px] text-stone-700"
+    >
+      <span>Dwell: <strong class="ad-dwell-timer text-emerald-800">0.0s</strong></span>
+      <span class="text-stone-300">|</span>
+      <span>Next Refresh: <strong class="ad-next-refresh text-[#D9381E]">30.0s</strong></span>
+      <span class="text-stone-300">|</span>
+      <span>In-View: <strong class="ad-ratio-readout text-[#141413]">0%</strong></span>
+    </div>
+  </div>
+</aside>

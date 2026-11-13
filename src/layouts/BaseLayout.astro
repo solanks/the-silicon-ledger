@@ -1,0 +1,282 @@
+---
+import SEOHead from '../components/SEOHead.astro';
+import AdSlot from '../components/AdSlot.astro';
+import type { Props as SEOProps } from '../components/SEOHead.astro';
+
+export interface Props extends SEOProps {
+  showTopLeaderboard?: boolean;
+}
+
+const { showTopLeaderboard = true, ...seoProps } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <SEOHead {...seoProps} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,400;1,6..72,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="min-h-screen bg-[#F7F4EE] pb-28 font-sans text-[#141413] antialiased selection:bg-[#D9381E] selection:text-white"
+  >
+    <!-- Editorial Masthead & Live Ad Telemetry Bar -->
+    <header class="sticky top-0 z-50 border-b-2 border-[#141413] bg-[#F7F4EE]/95 backdrop-blur-sm">
+      <div
+        class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:px-6 lg:px-8"
+      >
+        <div class="flex items-center gap-6">
+          <a
+            href="/"
+            class="flex items-baseline gap-2 font-serif text-2xl font-extrabold tracking-tight text-[#141413]"
+          >
+            <span
+              class="bg-[#141413] px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-widest text-[#F7F4EE]"
+            >
+              LAB
+            </span>
+            <span>The Silicon<span class="text-[#D9381E]">Ledger</span></span>
+          </a>
+
+          <nav
+            class="hidden items-center gap-5 border-l border-stone-300 pl-6 font-mono text-xs font-semibold uppercase tracking-wider text-stone-700 md:flex"
+          >
+            <a href="/" class="transition hover:text-[#D9381E]">Dispatches</a>
+            <a
+              href="/articles/skip-the-base-m5-macbook-pro-trap"
+              class="text-[#D9381E] underline decoration-2 underline-offset-4"
+            >
+              M5 Teardown Trap
+            </a>
+            <a
+              href="/articles/snapdragon-8-elite-vs-a18-pro-review"
+              class="transition hover:text-[#D9381E]"
+            >
+              SoC Bench
+            </a>
+            <a
+              href="/articles/rtx-5090-laptop-gpu-benchmarks"
+              class="transition hover:text-[#D9381E]"
+            >
+              GPUs
+            </a>
+            <a href="/rss.xml" class="transition hover:text-[#D9381E]">
+              RSS
+            </a>
+          </nav>
+        </div>
+
+        <!-- Compact Technical Ad Telemetry Strip -->
+        <div
+          class="flex flex-wrap items-center gap-3 border border-stone-900 bg-[#EFECE4] px-3 py-1 font-mono text-[11px] text-stone-800"
+        >
+          <span>
+            Units: <strong id="hud-total-ads" class="font-bold text-[#141413]">0</strong>
+          </span>
+          <span class="text-stone-400">/</span>
+          <span>
+            IAB Viewable:{' '}
+            <strong id="hud-viewable-ads" class="font-bold text-emerald-800">0%</strong>
+          </span>
+          <span class="text-stone-400">/</span>
+          <span>
+            30s Cycles:{' '}
+            <strong id="hud-refresh-count" class="font-bold text-[#D9381E]">0</strong>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Top Leaderboard Ad Slot (CLS-guarded) -->
+    {
+      showTopLeaderboard && (
+        <div class="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
+          <AdSlot
+            slotId="gam-top-billboard-1"
+            placement="leaderboard"
+            label="Top Broadsheet Billboard"
+          />
+        </div>
+      )
+    }
+
+    <!-- Main Page Content -->
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <slot />
+    </main>
+
+    <!-- Sticky Footer Adhesion Ad Unit (Refreshes every 30s while visible) -->
+    <div
+      id="sticky-footer-ad-bar"
+      class="fixed inset-x-0 bottom-0 z-40 border-t-2 border-[#141413] bg-[#EFECE4]/95 px-4 py-2 shadow-lg backdrop-blur-sm"
+    >
+      <div class="relative mx-auto max-w-5xl">
+        <button
+          id="dismiss-sticky-footer-ad"
+          type="button"
+          class="absolute -top-7 right-0 border border-b-0 border-[#141413] bg-[#EFECE4] px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-stone-800 hover:bg-[#141413] hover:text-white"
+          aria-label="Close sticky footer advertisement"
+        >
+          ✕ Dismiss Ad
+        </button>
+        <AdSlot
+          slotId="gam-sticky-footer-adhesion"
+          placement="footer-sticky"
+          label="Sticky Adhesion Unit (30s Refresh)"
+          minHeight="min-h-[58px]"
+        />
+      </div>
+    </div>
+
+    <!-- Editorial Colophon Footer -->
+    <footer class="mt-20 border-t-2 border-[#141413] bg-[#EFECE4] py-10 text-xs text-stone-700">
+      <div
+        class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:flex-row sm:items-center sm:px-6 lg:px-8"
+      >
+        <div>
+          <div class="font-serif text-base font-bold text-[#141413]">
+            The Silicon Ledger · Independent Hardware Testing &amp; Buyer Advocacy
+          </div>
+          <p class="mt-1 text-stone-600">
+            Typeset in Newsreader, Public Sans &amp; IBM Plex Mono. Zero sponsored review scores.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-5 font-mono text-xs font-semibold uppercase">
+          <a href="/" class="hover:text-[#D9381E]">Front Page</a>
+          <a href="/rss.xml" class="hover:text-[#D9381E]">RSS Feed</a>
+          <a
+            href="/og/skip-the-base-m5-macbook-pro-trap.svg"
+            target="_blank"
+            class="text-[#D9381E] underline"
+          >
+            Inspect OG Social Card
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Global IAB Active View (50% pixels >= 1s) + 30-Second Viewable Ad Auto-Refresh Engine -->
+    <script>
+      function initAdViewabilityAndRefreshEngine() {
+        const adWrappers = Array.from(
+          document.querySelectorAll<HTMLElement>('.ad-slot-wrapper')
+        );
+
+        const totalEl = document.getElementById('hud-total-ads');
+        const viewableEl = document.getElementById('hud-viewable-ads');
+        const refreshHudEl = document.getElementById('hud-refresh-count');
+        const dismissFooterBtn = document.getElementById('dismiss-sticky-footer-ad');
+        const stickyFooterBar = document.getElementById('sticky-footer-ad-bar');
+
+        dismissFooterBtn?.addEventListener('click', () => {
+          stickyFooterBar?.remove();
+        });
+
+        if (totalEl) totalEl.textContent = String(adWrappers.length);
+
+        const viewableSet = new Set<string>();
+        const dwellSeconds = new Map<HTMLElement, number>();
+        const refreshCountMap = new Map<HTMLElement, number>();
+        const inViewNow = new Set<HTMLElement>();
+        let totalRefreshes = 0;
+
+        const updateHud = () => {
+          if (viewableEl && adWrappers.length > 0) {
+            const pct = Math.round((viewableSet.size / adWrappers.length) * 100);
+            viewableEl.textContent = `${pct}% (${viewableSet.size}/${adWrappers.length})`;
+          }
+          if (refreshHudEl) {
+            refreshHudEl.textContent = String(totalRefreshes);
+          }
+        };
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const el = entry.target as HTMLElement;
+              const ratioEl = el.querySelector<HTMLElement>('.ad-ratio-readout');
+              const pctRatio = Math.round(entry.intersectionRatio * 100);
+              if (ratioEl) ratioEl.textContent = `${pctRatio}%`;
+
+              if (entry.intersectionRatio >= 0.5) {
+                inViewNow.add(el);
+              } else {
+                inViewNow.delete(el);
+              }
+            });
+          },
+          {
+            threshold: [0, 0.25, 0.5, 0.75, 1.0]
+          }
+        );
+
+        adWrappers.forEach((el, idx) => {
+          if (!el.dataset.adSlot) el.dataset.adSlot = `slot-${idx + 1}`;
+          dwellSeconds.set(el, 0);
+          refreshCountMap.set(el, 0);
+          observer.observe(el);
+        });
+
+        window.setInterval(() => {
+          inViewNow.forEach((el) => {
+            const prev = dwellSeconds.get(el) ?? 0;
+            const next = prev + 0.2;
+            dwellSeconds.set(el, next);
+
+            const timerEl = el.querySelector<HTMLElement>('.ad-dwell-timer');
+            if (timerEl) timerEl.textContent = `${next.toFixed(1)}s`;
+
+            const nextRefreshEl = el.querySelector<HTMLElement>('.ad-next-refresh');
+            const remaining = Math.max(0, 30 - (next % 30));
+            if (nextRefreshEl) nextRefreshEl.textContent = `${remaining.toFixed(1)}s`;
+
+            if (next >= 1.0) {
+              const slotId = el.dataset.adSlot ?? '';
+              if (!viewableSet.has(slotId)) {
+                viewableSet.add(slotId);
+                const badge = el.querySelector<HTMLElement>('.ad-viewability-badge');
+                if (badge) {
+                  badge.textContent = '✓ IAB VIEWABLE (≥1s)';
+                  badge.className =
+                    'ad-viewability-badge border border-emerald-800 bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-900';
+                }
+                updateHud();
+              }
+            }
+
+            const expectedRefreshes = Math.floor(next / 30.0);
+            const currentRefreshes = refreshCountMap.get(el) ?? 0;
+            if (expectedRefreshes > currentRefreshes) {
+              refreshCountMap.set(el, expectedRefreshes);
+              totalRefreshes += 1;
+
+              const refreshBadge = el.querySelector<HTMLElement>('.ad-refresh-badge');
+              if (refreshBadge) {
+                refreshBadge.textContent = `↻ REFRESHED #${expectedRefreshes}`;
+                refreshBadge.className =
+                  'ad-refresh-badge border border-[#D9381E] bg-[#FDECE9] px-2 py-0.5 font-mono text-[10px] font-bold text-[#B02A14]';
+              }
+
+              const unitBox = el.querySelector<HTMLElement>('.ad-unit-box');
+              unitBox?.classList.add('ring-2', 'ring-[#D9381E]');
+              window.setTimeout(() => {
+                unitBox?.classList.remove('ring-2', 'ring-[#D9381E]');
+              }, 800);
+
+              updateHud();
+            }
+          });
+        }, 200);
+
+        updateHud();
+      }
+
+      initAdViewabilityAndRefreshEngine();
+      document.addEventListener('astro:after-swap', initAdViewabilityAndRefreshEngine);
+    </script>
+  </body>
+</html>

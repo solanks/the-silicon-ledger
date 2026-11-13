@@ -1,0 +1,75 @@
+---
+export interface TranslationItem {
+  prQuote: string;
+  cynicTranslation: string;
+  walletImpact: string;
+}
+
+export interface Props {
+  companyName?: string;
+  bsScore?: number;
+  translations: TranslationItem[];
+}
+
+const {
+  companyName = 'Keynote PR Spin',
+  bsScore = 9.2,
+  translations = []
+} = Astro.props;
+---
+
+<section
+  class="not-prose my-9 border-2 border-[#141413] bg-[#FCFBF8] shadow-[6px_6px_0px_#141413]"
+  aria-label="Marketing BS vs. Reality Translator Box"
+>
+  <div
+    class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[#141413] bg-[#141413] px-5 py-3 text-[#F7F4EE]"
+  >
+    <div>
+      <h3 class="font-mono text-xs font-bold uppercase tracking-widest text-[#F7F4EE]">
+        The Wallet Protector · PR Spin vs. Bench Reality ({companyName})
+      </h3>
+    </div>
+
+    <div
+      class="bg-[#D9381E] px-2.5 py-0.5 font-mono text-xs font-extrabold uppercase text-white"
+    >
+      PR Spin Rating: {bsScore.toFixed(1)}/10
+    </div>
+  </div>
+
+  <div class="divide-y-2 divide-[#141413]">
+    {
+      translations.map((item) => (
+        <div class="grid gap-4 p-5 md:grid-cols-12 md:items-center">
+          <div class="border border-stone-300 bg-[#EFECE4] p-4 md:col-span-5">
+            <div class="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-stone-600">
+              What the Press Release Says
+            </div>
+            <p class="font-serif text-base italic leading-relaxed text-[#141413]">
+              “{item.prQuote}”
+            </p>
+          </div>
+
+          <div class="flex items-center justify-center font-mono text-sm font-extrabold text-[#D9381E] md:col-span-1">
+            →
+          </div>
+
+          <div class="border-l-4 border-[#D9381E] bg-[#FDECE9] p-4 md:col-span-6">
+            <div class="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+              <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-[#B02A14]">
+                What Our Teardown Found
+              </span>
+              <span class="bg-[#141413] px-2 py-0.5 font-mono text-[10px] font-bold text-white">
+                {item.walletImpact}
+              </span>
+            </div>
+            <p class="text-sm font-medium leading-relaxed text-[#141413]">
+              {item.cynicTranslation}
+            </p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,29 @@
+{
+  "draft-mode-spec-guard": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "write_file|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./scripts/pre_write_spec_guard.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "write_file|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./scripts/post_write_draft_pr.py",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

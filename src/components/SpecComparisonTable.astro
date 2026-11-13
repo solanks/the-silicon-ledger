@@ -1,0 +1,444 @@
+---
+export interface DeviceSpecHeader {
+  name: string;
+  chip?: string;
+  price?: string;
+  isReviewed?: boolean;
+}
+
+export interface SpecRow {
+  category?: string;
+  label: string;
+  unit?: string;
+  higherIsBetter?: boolean;
+  values: (number | string)[];
+  notes?: (string | undefined)[];
+}
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  baselineIndex?: number;
+  devices: DeviceSpecHeader[];
+  rows: SpecRow[];
+}
+
+const {
+  title = 'Lab Telemetry & Architecture Comparison',
+  subtitle = 'Percentages and color highlights (Green = Advantage, Red = Deficit) are calculated relative to the reference unit.',
+  baselineIndex = 0,
+  devices = [],
+  rows = []
+} = Astro.props;
+
+const tableId = `spec-table-${Math.random().toString(36).slice(2, 9)}`;
+
+function parseNum(val: number | string): number | null {
+  if (typeof val === 'number' && !Number.isNaN(val)) return val;
+  if (typeof val === 'string') {
+    const cleaned = val.replace(/[^0-9.-]+/g, '');
+    const parsed = Number.parseFloat(cleaned);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+const processedRows = rows.map((row) => {
+  const higherIsBetter = row.higherIsBetter ?? true;
+  const numericValues = row.values.map(parseNum);
+  const allNumeric = numericValues.every((v) => v !== null) && numericValues.length > 0;
+
+  const uniqueRaw = new Set(row.values.map((v) => String(v).trim().toLowerCase()));
+  const hasDifference = uniqueRaw.size > 1;
+
+  const maxNumeric = allNumeric
+    ? Math.max(...(numericValues as number[]), 0.0001)
+    : 100;
+
+  const baseVal = numericValues[baselineIndex] ?? null;
+
+  const cells = row.values.map((rawVal, colIdx) => {
+    const numVal = numericValues[colIdx];
+    const isBaseline = colIdx === baselineIndex;
+
+    let deltaPct: number | null = null;
+    let status: 'better' | 'worse' | 'neutral' | 'baseline' = isBaseline
+      ? 'baseline'
+      : 'neutral';
+
+    if (allNumeric && numVal !== null && baseVal !== null && baseVal !== 0) {
+      deltaPct = ((numVal - baseVal) / Math.abs(baseVal)) * 100;
+
+      if (!isBaseline && Math.abs(deltaPct) >= 1.0) {
+        const isBetter = higherIsBetter ? deltaPct > 0 : deltaPct < 0;
+        status = isBetter ? 'better' : 'worse';
+      }
+    } else if (!allNumeric && hasDifference && !isBaseline) {
+      const baseText = String(row.values[baselineIndex] ?? '').trim();
+      if (String(rawVal).trim() !== baseText) {
+        status = 'worse';
+      }
+    }
+
+    const barWidthPct =
+      allNumeric && numVal !== null && maxNumeric > 0
+        ? Math.max(8, Math.min(100, Math.round((numVal / maxNumeric) * 100)))
+        : 0;
+
+    return {
+      rawVal,
+      numVal,
+      isBaseline,
+      deltaPct,
+      status,
+      barWidthPct,
+      note: row.notes?.[colIdx]
+    };
+  });
+
+  return {
+    ...row,
+    higherIsBetter,
+    allNumeric,
+    hasDifference,
+    maxNumeric,
+    cells
+  };
+});
+---
+
+<section
+  id={tableId}
+  class="spec-comparison-widget not-prose my-10 border-2 border-[#141413] bg-[#FCFBF8] shadow-[6px_6px_0px_#141413]"
+  data-baseline-index={baselineIndex}
+>
+  <!-- Header & Interactive Controls -->
+  <div
+    class="flex flex-col justify-between gap-4 border-b-2 border-[#141413] bg-[#EFECE4] p-5 lg:flex-row lg:items-center"
+  >
+    <div>
+      <div class="font-mono text-[11px] font-bold uppercase tracking-widest text-[#D9381E]">
+        NotebookCheck-Style Bench Datasheet
+      </div>
+      <h3 class="mt-1 font-serif text-xl font-extrabold text-[#141413]">
+        {title}
+      </h3>
+      <p class="mt-0.5 text-xs text-stone-600">{subtitle}</p>
+    </div>
+
+    <!-- Interactive Baseline Switcher & Diff Filter -->
+    <div class="flex flex-wrap items-center gap-3">
+      <label class="flex items-center gap-2 font-mono text-xs text-stone-800">
+        <span class="font-bold">Base (100%):</span>
+        <select
+          class="spec-baseline-select border border-[#141413] bg-white px-2.5 py-1.5 font-mono text-xs font-semibold text-[#141413] focus:outline-none"
+        >
+          {
+            devices.map((dev, idx) => (
+              <option value={idx} selected={idx === baselineIndex}>
+                {dev.name} {dev.isReviewed ? '(Tested)' : ''}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+
+      <label
+        class="inline-flex cursor-pointer items-center gap-2 border border-[#141413] bg-white px-3 py-1.5 font-mono text-xs font-semibold text-[#141413] select-none"
+      >
+        <input
+          type="checkbox"
+          class="spec-diff-only-toggle h-3.5 w-3.5 accent-[#D9381E]"
+        />
+        <span>Only Differences</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Legend Bar -->
+  <div
+    class="flex flex-wrap items-center justify-between gap-3 border-b border-stone-300 bg-[#F7F4EE] px-5 py-2 font-mono text-[11px] text-stone-700"
+  >
+    <div class="flex flex-wrap items-center gap-4">
+      <span class="inline-flex items-center gap-1.5">
+        <span class="h-2.5 w-2.5 bg-[#15803D]"></span>
+        <strong class="text-[#15803D]">Green:</strong> Advantage vs. Base
+      </span>
+      <span class="inline-flex items-center gap-1.5">
+        <span class="h-2.5 w-2.5 bg-[#D9381E]"></span>
+        <strong class="text-[#D9381E]">Red:</strong> Deficit vs. Base
+      </span>
+      <span class="inline-flex items-center gap-1.5">
+        <span class="h-2.5 w-2.5 bg-[#141413]"></span>
+        <strong class="text-[#141413]">100% Base:</strong> Reference Unit
+      </span>
+    </div>
+    <span class="uppercase text-stone-600">
+      ↑ Higher is better · ↓ Lower is better
+    </span>
+  </div>
+
+  <!-- Responsive Comparison Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[680px] border-collapse text-left text-sm">
+      <thead>
+        <tr class="border-b-2 border-[#141413] bg-[#141413] text-[#F7F4EE]">
+          <th
+            class="w-56 px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider"
+          >
+            Metric / Test
+          </th>
+          {
+            devices.map((dev, idx) => (
+              <th
+                class:list={[
+                  'spec-device-header border-l border-stone-700 px-4 py-3 align-top',
+                  idx === baselineIndex ? 'bg-stone-800' : ''
+                ]}
+                data-col-index={idx}
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <span class="font-serif text-base font-bold text-white">
+                    {dev.name}
+                  </span>
+                  {dev.isReviewed && (
+                    <span class="bg-[#D9381E] px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase text-white">
+                      Tested
+                    </span>
+                  )}
+                </div>
+                <div class="mt-1 flex flex-wrap items-center gap-2 font-mono text-[11px] text-stone-300">
+                  {dev.chip && <span>{dev.chip}</span>}
+                  {dev.price && (
+                    <span class="border border-stone-600 px-1.5 py-0.5 text-stone-200">
+                      {dev.price}
+                    </span>
+                  )}
+                </div>
+              </th>
+            ))
+          }
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-stone-300">
+        {
+          processedRows.map((row) => (
+            <tr
+              class="spec-row hover:bg-[#EFECE4]/60"
+              data-has-diff={row.hasDifference ? 'true' : 'false'}
+              data-all-numeric={row.allNumeric ? 'true' : 'false'}
+              data-higher-better={row.higherIsBetter ? 'true' : 'false'}
+              data-unit={row.unit ?? ''}
+            >
+              <!-- Metric Label Column -->
+              <td class="px-4 py-3 align-middle">
+                {row.category && (
+                  <div class="font-mono text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                    {row.category}
+                  </div>
+                )}
+                <div class="font-semibold text-[#141413]">{row.label}</div>
+                {row.allNumeric && (
+                  <div class="mt-0.5 font-mono text-[10px] text-stone-600">
+                    {row.higherIsBetter ? '↑ Higher better' : '↓ Lower better'}
+                    {row.unit ? ` (${row.unit})` : ''}
+                  </div>
+                )}
+              </td>
+
+              <!-- Device Value Columns -->
+              {row.cells.map((cell, colIdx) => {
+                const cellBgClass =
+                  cell.status === 'better'
+                    ? 'bg-emerald-50/90 border-l-4 border-[#15803D]'
+                    : cell.status === 'worse'
+                      ? 'bg-[#FDECE9] border-l-4 border-[#D9381E]'
+                      : cell.status === 'baseline'
+                        ? 'bg-[#EFECE4] border-l-4 border-[#141413]'
+                        : 'border-l border-stone-200';
+
+                const badgeClass =
+                  cell.status === 'better'
+                    ? 'bg-[#15803D] text-white'
+                    : cell.status === 'worse'
+                      ? 'bg-[#D9381E] text-white'
+                      : cell.status === 'baseline'
+                        ? 'bg-[#141413] text-white'
+                        : 'bg-stone-200 text-stone-700';
+
+                const barClass =
+                  cell.status === 'better'
+                    ? 'bg-[#15803D]'
+                    : cell.status === 'worse'
+                      ? 'bg-[#D9381E]'
+                      : 'bg-[#141413]';
+
+                const formattedDelta =
+                  cell.isBaseline && row.allNumeric
+                    ? '100% (Base)'
+                    : cell.deltaPct !== null
+                      ? `${cell.deltaPct > 0 ? '+' : ''}${cell.deltaPct.toFixed(0)}%`
+                      : !row.allNumeric && !cell.isBaseline && row.hasDifference
+                        ? 'Differs'
+                        : 'Same';
+
+                return (
+                  <td
+                    class:list={[
+                      'spec-cell px-4 py-3 align-middle',
+                      cellBgClass
+                    ]}
+                    data-col-index={colIdx}
+                    data-num-value={cell.numVal !== null ? String(cell.numVal) : ''}
+                    data-raw-value={String(cell.rawVal)}
+                  >
+                    <div class="flex items-center justify-between gap-2">
+                      <span
+                        class:list={[
+                          'spec-value-text font-mono text-sm font-bold',
+                          cell.status === 'better'
+                            ? 'text-[#15803D]'
+                            : cell.status === 'worse'
+                              ? 'text-[#B02A14]'
+                              : 'text-[#141413]'
+                        ]}
+                      >
+                        {cell.rawVal}
+                        {row.unit && typeof cell.rawVal === 'number'
+                          ? ` ${row.unit}`
+                          : ''}
+                      </span>
+
+                      <span
+                        class:list={[
+                          'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold',
+                          badgeClass
+                        ]}
+                      >
+                        {formattedDelta}
+                      </span>
+                    </div>
+
+                    {row.allNumeric && (
+                      <div class="mt-2 h-2 w-full bg-stone-300">
+                        <div
+                          class:list={[
+                            'spec-bar h-full transition-all duration-300',
+                            barClass
+                          ]}
+                          style={`width: ${cell.barWidthPct}%`}
+                        />
+                      </div>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  function initSpecTables() {
+    const tables = document.querySelectorAll<HTMLElement>('.spec-comparison-widget');
+
+    tables.forEach((widget) => {
+      const select = widget.querySelector<HTMLSelectElement>('.spec-baseline-select');
+      const diffToggle = widget.querySelector<HTMLInputElement>('.spec-diff-only-toggle');
+      const rows = widget.querySelectorAll<HTMLTableRowElement>('.spec-row');
+
+      const updateBaseline = (baseIdx: number) => {
+        rows.forEach((row) => {
+          const allNumeric = row.dataset.allNumeric === 'true';
+          const higherIsBetter = row.dataset.higherBetter === 'true';
+          const hasDiff = row.dataset.hasDiff === 'true';
+          const cells = Array.from(row.querySelectorAll<HTMLTableCellElement>('.spec-cell'));
+
+          const baseCell = cells[baseIdx];
+          if (!baseCell) return;
+
+          const baseNum = Number.parseFloat(baseCell.dataset.numValue ?? '');
+          const baseRaw = (baseCell.dataset.rawValue ?? '').trim();
+
+          cells.forEach((cell, idx) => {
+            const isBase = idx === baseIdx;
+            const numVal = Number.parseFloat(cell.dataset.numValue ?? '');
+            const rawVal = (cell.dataset.rawValue ?? '').trim();
+
+            let status: 'better' | 'worse' | 'neutral' | 'baseline' = isBase
+              ? 'baseline'
+              : 'neutral';
+            let badgeText = 'Same';
+
+            if (allNumeric && Number.isFinite(numVal) && Number.isFinite(baseNum) && baseNum !== 0) {
+              const delta = ((numVal - baseNum) / Math.abs(baseNum)) * 100;
+              if (isBase) {
+                badgeText = '100% (Base)';
+              } else {
+                badgeText = `${delta > 0 ? '+' : ''}${delta.toFixed(0)}%`;
+                if (Math.abs(delta) >= 1.0) {
+                  const isBetter = higherIsBetter ? delta > 0 : delta < 0;
+                  status = isBetter ? 'better' : 'worse';
+                }
+              }
+            } else if (!allNumeric) {
+              if (isBase) {
+                badgeText = 'Base';
+              } else if (hasDiff && rawVal !== baseRaw) {
+                status = 'worse';
+                badgeText = 'Differs';
+              }
+            }
+
+            const valText = cell.querySelector('.spec-value-text');
+            const badge = cell.querySelector('.spec-delta-badge');
+            const bar = cell.querySelector('.spec-bar');
+
+            if (status === 'better') {
+              cell.className = 'spec-cell px-4 py-3 align-middle bg-emerald-50/90 border-l-4 border-[#15803D]';
+              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-[#15803D]';
+              if (badge) badge.className = 'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold bg-[#15803D] text-white';
+              if (bar) bar.className = 'spec-bar h-full transition-all duration-300 bg-[#15803D]';
+            } else if (status === 'worse') {
+              cell.className = 'spec-cell px-4 py-3 align-middle bg-[#FDECE9] border-l-4 border-[#D9381E]';
+              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-[#B02A14]';
+              if (badge) badge.className = 'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold bg-[#D9381E] text-white';
+              if (bar) bar.className = 'spec-bar h-full transition-all duration-300 bg-[#D9381E]';
+            } else if (status === 'baseline') {
+              cell.className = 'spec-cell px-4 py-3 align-middle bg-[#EFECE4] border-l-4 border-[#141413]';
+              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-[#141413]';
+              if (badge) badge.className = 'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold bg-[#141413] text-white';
+              if (bar) bar.className = 'spec-bar h-full transition-all duration-300 bg-[#141413]';
+            } else {
+              cell.className = 'spec-cell px-4 py-3 align-middle border-l border-stone-200';
+              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-[#141413]';
+              if (badge) badge.className = 'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold bg-stone-200 text-stone-700';
+              if (bar) bar.className = 'spec-bar h-full transition-all duration-300 bg-[#141413]';
+            }
+
+            if (badge) badge.textContent = badgeText;
+          });
+        });
+      };
+
+      select?.addEventListener('change', () => {
+        const idx = Number.parseInt(select.value, 10);
+        if (!Number.isNaN(idx)) updateBaseline(idx);
+      });
+
+      diffToggle?.addEventListener('change', () => {
+        const onlyDiff = diffToggle.checked;
+        rows.forEach((row) => {
+          const hasDiff = row.dataset.hasDiff === 'true';
+          row.style.display = onlyDiff && !hasDiff ? 'none' : '';
+        });
+      });
+    });
+  }
+
+  initSpecTables();
+  document.addEventListener('astro:after-swap', initSpecTables);
+</script>

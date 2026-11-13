@@ -1,0 +1,15 @@
+# Build & framework output
+dist/
+.astro/
+node_modules/
+
+# Netlify local state (never commit .netlify/state.json)
+.netlify/
+
+# Environment variables & secrets (never commit .env)
+.env
+.env.*
+!.env.example
+
+# macOS / Editor
+.DS_Store

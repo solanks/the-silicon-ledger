@@ -1,0 +1,211 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AdSlot from '../components/AdSlot.astro';
+import SpecComparisonTable from '../components/SpecComparisonTable.astro';
+
+const allArticles = (await getCollection('articles')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const featuredArticle =
+  allArticles.find((a) => a.data.featured) ?? allArticles[0];
+---
+
+<BaseLayout
+  title="Independent Silicon Teardowns, Benchmarks & Buyer Advocacy"
+  description="The Silicon Ledger delivers independent hardware teardowns, NotebookCheck-style benchmark matrices, and no-spin buyer guidance."
+>
+  <!-- Lead Broadsheet Teardown Story -->
+  {
+    featuredArticle && (
+      <section class="mb-12">
+        <div class="border-2 border-[#141413] bg-[#FCFBF8] shadow-[8px_8px_0px_#141413]">
+          <div class="grid grid-cols-1 lg:grid-cols-12">
+            <div class="relative aspect-video overflow-hidden border-b-2 border-[#141413] bg-stone-900 lg:col-span-7 lg:aspect-auto lg:border-b-0 lg:border-r-2">
+              <img
+                src={featuredArticle.data.heroImage.src}
+                alt={featuredArticle.data.heroImage.alt}
+                width={featuredArticle.data.heroImage.width}
+                height={featuredArticle.data.heroImage.height}
+                fetchpriority="high"
+                class="h-full w-full object-cover"
+              />
+              <div class="absolute left-4 top-4 flex items-center gap-2 font-mono text-xs font-bold uppercase">
+                <span class="border border-[#141413] bg-[#D9381E] px-3 py-1 text-white">
+                  Lead Investigation
+                </span>
+                <span class="border border-[#141413] bg-[#FCFBF8] px-3 py-1 text-[#141413]">
+                  Lab Score: {featuredArticle.data.verdict.score.toFixed(1)} / 10
+                </span>
+              </div>
+            </div>
+
+            <div class="flex flex-col justify-between p-6 sm:p-8 lg:col-span-5">
+              <div>
+                <div class="mb-3 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#D9381E]">
+                  <span>{featuredArticle.data.category}</span>
+                  <span>·</span>
+                  <span>{featuredArticle.data.readingTimeMinutes} min read</span>
+                </div>
+
+                <h1 class="font-serif text-3xl font-extrabold leading-[1.12] text-[#141413] sm:text-4xl">
+                  <a
+                    href={`/articles/${featuredArticle.slug}`}
+                    class="hover:text-[#D9381E]"
+                  >
+                    {featuredArticle.data.title}
+                  </a>
+                </h1>
+
+                <p class="mt-4 text-sm leading-relaxed text-stone-700">
+                  {featuredArticle.data.verdict.summary}
+                </p>
+              </div>
+
+              <div class="mt-6 border-t-2 border-[#141413] pt-4">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="font-mono text-xs text-stone-600">
+                    By <strong class="text-[#141413]">{featuredArticle.data.author.name}</strong>
+                  </div>
+                  <a
+                    href={`/articles/${featuredArticle.slug}`}
+                    class="inline-flex items-center gap-2 border-2 border-[#141413] bg-[#141413] px-4 py-2 font-mono text-xs font-bold uppercase text-[#F7F4EE] transition hover:bg-[#D9381E]"
+                  >
+                    <span>Read Full Teardown →</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Main Dispatch Feed + Sticky Sidebar Ad Slot -->
+  <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
+    <div class="space-y-8 lg:col-span-8">
+      <div class="flex items-center justify-between border-b-2 border-[#141413] pb-2">
+        <h2 class="font-serif text-2xl font-extrabold text-[#141413]">
+          Latest Lab Dispatches &amp; Teardowns
+        </h2>
+        <span class="font-mono text-xs font-semibold text-stone-600">
+          {allArticles.length} Filed Reports
+        </span>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        {
+          allArticles.map((article) => (
+            <article class="group flex flex-col justify-between border-2 border-[#141413] bg-[#FCFBF8] shadow-[4px_4px_0px_#141413]">
+              <div>
+                <a
+                  href={`/articles/${article.slug}`}
+                  class="relative block aspect-video overflow-hidden border-b-2 border-[#141413] bg-stone-900"
+                >
+                  <img
+                    src={article.data.heroImage.src}
+                    alt={article.data.heroImage.alt}
+                    width={article.data.heroImage.width}
+                    height={article.data.heroImage.height}
+                    loading="lazy"
+                    class="h-full w-full object-cover"
+                  />
+                  <span class="absolute bottom-3 right-3 border border-[#141413] bg-[#FCFBF8] px-2.5 py-0.5 font-mono text-xs font-extrabold text-[#141413]">
+                    {article.data.verdict.score.toFixed(1)}/10
+                  </span>
+                </a>
+
+                <div class="p-5">
+                  <div class="mb-2 flex items-center gap-2 font-mono text-[11px] font-bold uppercase text-[#D9381E]">
+                    <span>{article.data.category}</span>
+                    <span>·</span>
+                    <span>{article.data.readingTimeMinutes}m read</span>
+                  </div>
+                  <h3 class="font-serif text-xl font-extrabold leading-snug text-[#141413] group-hover:text-[#D9381E]">
+                    <a href={`/articles/${article.slug}`}>
+                      {article.data.title}
+                    </a>
+                  </h3>
+                  <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-stone-700">
+                    {article.data.description}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between border-t border-stone-300 bg-[#EFECE4] px-5 py-3 font-mono text-[11px] text-stone-700">
+                <span>{article.data.author.name}</span>
+                <a
+                  href={`/articles/${article.slug}`}
+                  class="font-bold uppercase text-[#D9381E] hover:underline"
+                >
+                  Open Report →
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <!-- Live Demo of the NotebookCheck-Style Dynamic Spec Comparison Component -->
+      <SpecComparisonTable
+        title="2026 Flagship Silicon Bench Matrix"
+        subtitle="Switch the reference unit or filter to 'Only Differences' to inspect real-time green/red delta cells."
+        baselineIndex={0}
+        devices={[
+          {
+            name: 'Snapdragon 8 Elite',
+            chip: 'TSMC N3E · Oryon',
+            price: '$1,199',
+            isReviewed: true
+          },
+          {
+            name: 'Apple A18 Pro',
+            chip: 'TSMC N3E · 6-Core',
+            price: '$1,199'
+          },
+          {
+            name: 'Dimensity 9400',
+            chip: 'TSMC N3E · X925',
+            price: '$999'
+          }
+        ]}
+        rows={[
+          {
+            category: 'CPU Compute',
+            label: 'Geekbench 6.3 Multi-Core',
+            unit: 'pts',
+            higherIsBetter: true,
+            values: [10480, 8640, 9180]
+          },
+          {
+            category: 'GPU Ray Tracing',
+            label: '3DMark Solar Bay Sustained',
+            unit: 'FPS',
+            higherIsBetter: true,
+            values: [46.4, 34.6, 44.1]
+          },
+          {
+            category: 'Power Draw',
+            label: 'Peak Stress Power Draw',
+            unit: 'W',
+            higherIsBetter: false,
+            values: [14.8, 11.2, 13.5]
+          }
+        ]}
+      />
+    </div>
+
+    <!-- Right Sticky Sidebar Rail -->
+    <aside class="lg:col-span-4">
+      <div class="sticky top-16 space-y-6">
+        <AdSlot
+          slotId="gam-home-sidebar-sticky-300x600"
+          placement="sidebar-sticky"
+          label="Sticky Sidebar Rail (300×600)"
+        />
+      </div>
+    </aside>
+  </div>
+</BaseLayout>
