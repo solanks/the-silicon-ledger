@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
-import sitemap from '@astrojs/sitemap';
 import { rehypeInjectAds } from './src/plugins/rehype-inject-ads.mjs';
 
 export default defineConfig({
@@ -16,7 +15,6 @@ export default defineConfig({
     }),
     mdx({
       rehypePlugins: [[rehypeInjectAds, { interval: 3 }]]
-    }),
-    sitemap()
+    })
   ]
 });
