@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact the Lab & Editorial Desk"
+  description="Submit hardware teardown tips, benchmark corrections, or advertising inquiries to The Silicon Ledger."
+>
+  <article class="mx-auto max-w-3xl border-2 border-[#141413] bg-[#FCFBF8] p-8 shadow-[6px_6px_0px_#141413]">
+    <div class="mb-3 font-mono text-xs font-bold uppercase tracking-widest text-[#D9381E]">
+      Editorial &amp; Ad Desk
+    </div>
+    <h1 class="font-serif text-4xl font-extrabold text-[#141413]">
+      Contact The Silicon Ledger
+    </h1>
+    <p class="mt-2 text-sm text-stone-700">
+      Have a silicon leak, thermal teardown tip, benchmark correction, or direct sponsorship inquiry? Send a dispatch below.
+    </p>
+
+    <form
+      name="editorial-contact"
+      method="POST"
+      data-netlify="true"
+      class="mt-6 space-y-4 font-mono text-xs"
+    >
+      <input type="hidden" name="form-name" value="editorial-contact" />
+      <div>
+        <label class="mb-1 block font-bold uppercase text-[#141413]">
+          Your Name or Handle
+          <input
+            type="text"
+            name="name"
+            required
+            class="mt-1 w-full border-2 border-[#141413] bg-white px-3 py-2 text-sm text-[#141413]"
+          />
+        </label>
+      </div>
+      <div>
+        <label class="mb-1 block font-bold uppercase text-[#141413]">
+          Reply Email
+          <input
+            type="email"
+            name="email"
+            required
+            class="mt-1 w-full border-2 border-[#141413] bg-white px-3 py-2 text-sm text-[#141413]"
+          />
+        </label>
+      </div>
+      <div>
+        <label class="mb-1 block font-bold uppercase text-[#141413]">
+          Subject / Department
+          <select
+            name="department"
+            class="mt-1 w-full border-2 border-[#141413] bg-white px-3 py-2 text-sm text-[#141413]"
+          >
+            <option value="tip">Hardware Leak / Teardown Tip</option>
+            <option value="correction">Benchmark / Spec Correction</option>
+            <option value="advertising">Direct Ad &amp; Sponsorship Inquiry</option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <label class="mb-1 block font-bold uppercase text-[#141413]">
+          Message
+          <textarea
+            name="message"
+            rows="4"
+            required
+            class="mt-1 w-full border-2 border-[#141413] bg-white px-3 py-2 text-sm text-[#141413]"
+          ></textarea>
+        </label>
+      </div>
+      <button
+        type="submit"
+        class="border-2 border-[#141413] bg-[#D9381E] px-6 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#141413]"
+      >
+        Send Dispatch →
+      </button>
+    </form>
+  </article>
+</BaseLayout>

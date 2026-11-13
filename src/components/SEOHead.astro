@@ -34,15 +34,16 @@ const {
   category = 'Hardware',
   tags = [],
   author = {
-    name: 'Elena Vance',
+    name: 'Dr. Elena Vance',
     role: 'Chief Silicon Architect',
-    url: 'https://techpulse.example.com/authors/elena-vance'
+    url: 'https://the-silicon-ledger.netlify.app/about'
   },
   heroImage,
   verdictScore
 } = Astro.props;
 
-const siteUrl = Astro.site?.origin ?? 'https://techpulse.example.com';
+const siteUrl = Astro.site?.origin ?? 'https://the-silicon-ledger.netlify.app';
+const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || '';
 
 // High-contrast generated OpenGraph image URL for articles
 const ogImageUrl = slug
@@ -89,18 +90,18 @@ const newsArticleJsonLd = isArticle
           '@type': 'Person',
           name: author.name,
           jobTitle: author.role,
-          url: author.url ?? `${siteUrl}/authors`
+          url: `${siteUrl}/about`
         }
       ],
       publisher: {
         '@type': 'Organization',
-        name: 'TechPulse Labs',
+        name: 'The Silicon Ledger',
         url: siteUrl,
         logo: {
           '@type': 'ImageObject',
-          url: `${siteUrl}/logo-schema.png`,
-          width: 600,
-          height: 60
+          url: `${siteUrl}/og/default.png`,
+          width: 1200,
+          height: 630
         }
       },
       isAccessibleForFree: true,
@@ -118,7 +119,7 @@ const newsArticleJsonLd = isArticle
   : {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: 'TechPulse Labs',
+      name: 'The Silicon Ledger',
       url: siteUrl,
       description
     };
@@ -126,7 +127,7 @@ const newsArticleJsonLd = isArticle
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{title} | TechPulse Labs</title>
+<title>{title} | The Silicon Ledger</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalUrl} />
 
@@ -137,16 +138,22 @@ const newsArticleJsonLd = isArticle
 />
 <meta name="googlebot" content="index, follow, max-image-preview:large" />
 
-<!-- RSS Feed for Google Discover / Google News Follow feature -->
+<!-- RSS & Google News Sitemap Feeds for Google Discover Follow feature -->
 <link
   rel="alternate"
   type="application/rss+xml"
-  title="TechPulse Labs Hardware & Silicon Feed"
+  title="The Silicon Ledger Hardware & Silicon Feed"
   href={`${siteUrl}/rss.xml`}
+/>
+<link
+  rel="sitemap"
+  type="application/xml"
+  title="Sitemap"
+  href={`${siteUrl}/sitemap.xml`}
 />
 
 <!-- OpenGraph Metadata with High-Contrast Generated OG Image -->
-<meta property="og:site_name" content="TechPulse Labs" />
+<meta property="og:site_name" content="The Silicon Ledger" />
 <meta property="og:type" content={isArticle ? 'article' : 'website'} />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:title" content={title} />
@@ -156,7 +163,7 @@ const newsArticleJsonLd = isArticle
 <meta property="og:image:height" content="630" />
 <meta
   property="og:image:alt"
-  content={heroImage?.alt ?? `${title} — TechPulse Labs Review`}
+  content={heroImage?.alt ?? `${title} — The Silicon Ledger Review`}
 />
 
 {
@@ -183,6 +190,20 @@ const newsArticleJsonLd = isArticle
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageUrl} />
+
+<!-- Google AdSense Auto-Loader (Activates automatically when PUBLIC_ADSENSE_CLIENT_ID is set) -->
+{
+  adsenseClientId && (
+    <>
+      <meta name="google-adsense-account" content={adsenseClientId} />
+      <script
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
+        crossorigin="anonymous"
+      />
+    </>
+  )
+}
 
 <!-- Automatic NewsArticle / WebSite JSON-LD Schema -->
 <script

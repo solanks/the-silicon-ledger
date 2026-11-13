@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Explicitly allow Google AdSense & Google Discover crawlers
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+Sitemap: https://the-silicon-ledger.netlify.app/sitemap.xml
+Sitemap: https://the-silicon-ledger.netlify.app/news-sitemap.xml

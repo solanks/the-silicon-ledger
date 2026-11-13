@@ -10,9 +10,9 @@ export async function GET(context: APIContext) {
   const siteUrl = context.site?.origin ?? 'https://techpulse.example.com';
 
   return rss({
-    title: 'TechPulse Labs — Hardware & Silicon Benchmarks',
+    title: 'The Silicon Ledger — Hardware & Silicon Benchmarks',
     description:
-      'Independent silicon telemetry, NotebookCheck-style spec comparisons, and Google Discover optimized hardware reviews.',
+      'Independent silicon telemetry, lab spec comparison matrices, and no-spin hardware reviews.',
     site: siteUrl,
     items: articles.map((article) => ({
       title: article.data.title,

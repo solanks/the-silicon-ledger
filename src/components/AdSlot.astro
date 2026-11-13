@@ -32,6 +32,8 @@ const {
         ? 'Footer Adhesion Unit'
         : 'In-Column Display Unit'
 } = Astro.props;
+
+const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || '';
 ---
 
 <aside
@@ -66,28 +68,44 @@ const {
       minHeight
     ]}
   >
-    <div
-      class="mb-1.5 border border-[#141413] bg-[#EFECE4] px-3 py-1 font-mono text-xs font-bold text-[#141413]"
-    >
-      Slot: {slotId} · {format}
-    </div>
     {
-      placement !== 'footer-sticky' && (
-        <p class="max-w-xs font-sans text-xs leading-relaxed text-stone-600">
-          {placement === 'sidebar-sticky'
-            ? 'Reserved 300×600 sticky rail container (CLS = 0.00) with 30-second Active View refresh.'
-            : 'CLS-reserved display/video slot with IntersectionObserver lazy loading.'}
-        </p>
+      adsenseClientId ? (
+        <ins
+          class="adsbygoogle block w-full"
+          style="display:block"
+          data-ad-client={adsenseClientId}
+          data-ad-slot={slotId}
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
+      ) : (
+        <>
+          <div class="mb-1.5 border border-[#141413] bg-[#EFECE4] px-3 py-1 font-mono text-xs font-bold text-[#141413]">
+            Slot: {slotId} · {format}
+          </div>
+          {placement !== 'footer-sticky' && (
+            <p class="max-w-xs font-sans text-xs leading-relaxed text-stone-600">
+              {placement === 'sidebar-sticky'
+                ? 'Reserved 300×600 sticky rail container (CLS = 0.00) with 30-second Active View refresh.'
+                : 'CLS-reserved display/video slot with IntersectionObserver lazy loading.'}
+            </p>
+          )}
+          <div class="mt-2.5 flex flex-wrap items-center justify-center gap-3 border border-stone-300 bg-white px-3 py-1 font-mono text-[11px] text-stone-700">
+            <span>
+              Dwell: <strong class="ad-dwell-timer text-emerald-800">0.0s</strong>
+            </span>
+            <span class="text-stone-300">|</span>
+            <span>
+              Next Refresh:{' '}
+              <strong class="ad-next-refresh text-[#D9381E]">30.0s</strong>
+            </span>
+            <span class="text-stone-300">|</span>
+            <span>
+              In-View: <strong class="ad-ratio-readout text-[#141413]">0%</strong>
+            </span>
+          </div>
+        </>
       )
     }
-    <div
-      class="mt-2.5 flex flex-wrap items-center justify-center gap-3 border border-stone-300 bg-white px-3 py-1 font-mono text-[11px] text-stone-700"
-    >
-      <span>Dwell: <strong class="ad-dwell-timer text-emerald-800">0.0s</strong></span>
-      <span class="text-stone-300">|</span>
-      <span>Next Refresh: <strong class="ad-next-refresh text-[#D9381E]">30.0s</strong></span>
-      <span class="text-stone-300">|</span>
-      <span>In-View: <strong class="ad-ratio-readout text-[#141413]">0%</strong></span>
-    </div>
   </div>
 </aside>
