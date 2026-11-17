@@ -173,6 +173,18 @@ function createInContentAdNode(adIndex, afterParagraph) {
         children: [
           {
             type: 'element',
+            tagName: 'ins',
+            properties: {
+              className: ['adsbygoogle', 'block', 'w-full'],
+              style: 'display:block',
+              'data-ad-client': 'ca-pub-6428626874238056',
+              'data-ad-format': 'auto',
+              'data-full-width-responsive': 'true'
+            },
+            children: []
+          },
+          {
+            type: 'element',
             tagName: 'div',
             properties: {
               className: [
@@ -191,7 +203,7 @@ function createInContentAdNode(adIndex, afterParagraph) {
             children: [
               {
                 type: 'text',
-                value: `GAM / AdSense Slot (${slotId}) · 300×250 / 336×280 (30s Refresh)`
+                value: `AdSense In-Article Unit (${slotId}) · ca-pub-6428626874238056`
               }
             ]
           },

@@ -1,3 +1,1 @@
-# The Silicon Ledger - Authorized Digital Sellers (IAB ads.txt)
-# Replace pub-0000000000000000 with your Google AdSense Publisher ID once approved
-google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+google.com, pub-6428626874238056, DIRECT, f08c47fec0942fa0

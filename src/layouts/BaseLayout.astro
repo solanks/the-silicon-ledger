@@ -217,6 +217,16 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
           dwellSeconds.set(el, 0);
           refreshCountMap.set(el, 0);
           observer.observe(el);
+
+          // Initialize Google AdSense unit inside slot
+          const ins = el.querySelector('ins.adsbygoogle');
+          if (ins && !ins.getAttribute('data-adsbygoogle-status')) {
+            try {
+              ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+            } catch {
+              // AdSense script will process queued slots once loaded
+            }
+          }
         });
 
         window.setInterval(() => {

@@ -43,7 +43,8 @@ const {
 } = Astro.props;
 
 const siteUrl = Astro.site?.origin ?? 'https://the-silicon-ledger.netlify.app';
-const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || '';
+const adsenseClientId =
+  import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-6428626874238056';
 
 // High-contrast generated OpenGraph image URL for articles
 const ogImageUrl = slug

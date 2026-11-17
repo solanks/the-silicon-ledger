@@ -33,13 +33,15 @@ const {
         : 'In-Column Display Unit'
 } = Astro.props;
 
-const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || '';
+const adsenseClientId =
+  import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-6428626874238056';
 ---
 
 <aside
   class="ad-slot-wrapper not-prose w-full border border-stone-400 bg-[#EFECE4] p-3"
   data-ad-slot={slotId}
   data-ad-placement={placement}
+  data-ad-client={adsenseClientId}
   data-refresh-interval="30"
   aria-label={`Advertisement: ${label}`}
 >
@@ -68,44 +70,25 @@ const adsenseClientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || '';
       minHeight
     ]}
   >
-    {
-      adsenseClientId ? (
-        <ins
-          class="adsbygoogle block w-full"
-          style="display:block"
-          data-ad-client={adsenseClientId}
-          data-ad-slot={slotId}
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
-      ) : (
-        <>
-          <div class="mb-1.5 border border-[#141413] bg-[#EFECE4] px-3 py-1 font-mono text-xs font-bold text-[#141413]">
-            Slot: {slotId} · {format}
-          </div>
-          {placement !== 'footer-sticky' && (
-            <p class="max-w-xs font-sans text-xs leading-relaxed text-stone-600">
-              {placement === 'sidebar-sticky'
-                ? 'Reserved 300×600 sticky rail container (CLS = 0.00) with 30-second Active View refresh.'
-                : 'CLS-reserved display/video slot with IntersectionObserver lazy loading.'}
-            </p>
-          )}
-          <div class="mt-2.5 flex flex-wrap items-center justify-center gap-3 border border-stone-300 bg-white px-3 py-1 font-mono text-[11px] text-stone-700">
-            <span>
-              Dwell: <strong class="ad-dwell-timer text-emerald-800">0.0s</strong>
-            </span>
-            <span class="text-stone-300">|</span>
-            <span>
-              Next Refresh:{' '}
-              <strong class="ad-next-refresh text-[#D9381E]">30.0s</strong>
-            </span>
-            <span class="text-stone-300">|</span>
-            <span>
-              In-View: <strong class="ad-ratio-readout text-[#141413]">0%</strong>
-            </span>
-          </div>
-        </>
-      )
-    }
+    <!-- Live Google AdSense Unit (ca-pub-6428626874238056) -->
+    <ins
+      class="adsbygoogle block w-full"
+      style="display:block"
+      data-ad-client={adsenseClientId}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+
+    <div
+      class="mt-2 flex flex-wrap items-center justify-center gap-3 border border-stone-300 bg-white px-3 py-1 font-mono text-[11px] text-stone-700"
+    >
+      <span>AdSense: <strong class="text-[#141413]">{adsenseClientId}</strong></span>
+      <span class="text-stone-300">|</span>
+      <span>Dwell: <strong class="ad-dwell-timer text-emerald-800">0.0s</strong></span>
+      <span class="text-stone-300">|</span>
+      <span>Next Refresh: <strong class="ad-next-refresh text-[#D9381E]">30.0s</strong></span>
+      <span class="text-stone-300">|</span>
+      <span>In-View: <strong class="ad-ratio-readout text-[#141413]">0%</strong></span>
+    </div>
   </div>
 </aside>
