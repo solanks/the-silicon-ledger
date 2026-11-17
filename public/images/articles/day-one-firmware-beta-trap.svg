@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <pattern id="gridFirmware" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#D6D1C4" stroke-width="1" />
+    </pattern>
+    <marker id="arrowFirm" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#D9381E" />
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#F4F0E6" />
+  <rect width="1600" height="900" fill="url(#gridFirmware)" />
+  <rect x="40" y="40" width="1520" height="820" fill="none" stroke="#141413" stroke-width="4" />
+
+  <rect x="80" y="76" width="560" height="54" fill="#D9381E" />
+  <text x="360" y="111" text-anchor="middle" fill="#ffffff" font-family="ui-monospace, monospace" font-size="22" font-weight="800" letter-spacing="1.5">
+    LAB FAILURE TELEMETRY // 12V-2x6 &amp; BIOS
+  </text>
+
+  <!-- Diagram of 16-Pin Power Connector & Microcode Voltage Spike -->
+  <rect x="248" y="218" width="1100" height="540" fill="#141413" />
+  <rect x="240" y="210" width="1100" height="540" fill="#FCFBF8" stroke="#141413" stroke-width="5" />
+
+  <!-- Pin Row -->
+  <g transform="translate(360, 320)">
+    <rect x="0" y="0" width="120" height="120" fill="#EFECE4" stroke="#141413" stroke-width="4" />
+    <text x="60" y="70" text-anchor="middle" fill="#141413" font-family="ui-monospace, monospace" font-size="24" font-weight="800">PIN 1</text>
+
+    <rect x="150" y="0" width="120" height="120" fill="#EFECE4" stroke="#141413" stroke-width="4" />
+    <text x="210" y="70" text-anchor="middle" fill="#141413" font-family="ui-monospace, monospace" font-size="24" font-weight="800">PIN 2</text>
+
+    <!-- Overloaded Pin 3 (Circled in Red) -->
+    <rect x="300" y="0" width="120" height="120" fill="#D9381E" stroke="#141413" stroke-width="4" />
+    <text x="360" y="55" text-anchor="middle" fill="#ffffff" font-family="ui-monospace, monospace" font-size="22" font-weight="800">PIN 3</text>
+    <text x="360" y="90" text-anchor="middle" fill="#FDECE9" font-family="ui-monospace, monospace" font-size="20" font-weight="800">114°C!</text>
+    <circle cx="360" cy="60" r="95" fill="none" stroke="#D9381E" stroke-width="8" stroke-dasharray="18 8" />
+
+    <rect x="450" y="0" width="120" height="120" fill="#EFECE4" stroke="#141413" stroke-width="4" />
+    <text x="510" y="70" text-anchor="middle" fill="#141413" font-family="ui-monospace, monospace" font-size="24" font-weight="800">PIN 4</text>
+
+    <rect x="600" y="0" width="120" height="120" fill="#EFECE4" stroke="#141413" stroke-width="4" />
+    <text x="660" y="70" text-anchor="middle" fill="#141413" font-family="ui-monospace, monospace" font-size="24" font-weight="800">PIN 5</text>
+
+    <rect x="750" y="0" width="120" height="120" fill="#EFECE4" stroke="#141413" stroke-width="4" />
+    <text x="810" y="70" text-anchor="middle" fill="#141413" font-family="ui-monospace, monospace" font-size="24" font-weight="800">PIN 6</text>
+  </g>
+
+  <rect x="340" y="550" width="900" height="130" fill="#141413" />
+  <text x="790" y="605" text-anchor="middle" fill="#F7F4EE" font-family="Georgia, serif" font-size="34" font-weight="900">
+    Why Day-One Buyers Pay 30% More to Be Unpaid QA Testers
+  </text>
+  <text x="790" y="652" text-anchor="middle" fill="#D9381E" font-family="ui-monospace, monospace" font-size="22" font-weight="800">
+    ZERO PER-PIN CURRENT BALANCING + UNPATCHED LAUNCH MICROCODE
+  </text>
+</svg>

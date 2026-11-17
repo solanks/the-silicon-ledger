@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <pattern id="gridOutage" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#D6D1C4" stroke-width="1" />
+    </pattern>
+    <marker id="arrowRedOutage" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#D9381E" />
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#F4F0E6" />
+  <rect width="1600" height="900" fill="url(#gridOutage)" />
+  <rect x="40" y="40" width="1520" height="820" fill="none" stroke="#141413" stroke-width="4" />
+
+  <!-- Top Banner -->
+  <rect x="80" y="76" width="520" height="54" fill="#D9381E" />
+  <text x="340" y="111" text-anchor="middle" fill="#ffffff" font-family="ui-monospace, monospace" font-size="22" font-weight="800" letter-spacing="1.5">
+    INFRASTRUCTURE POST-MORTEM // HTTP 503
+  </text>
+
+  <!-- Central Single Point of Failure Node (Circled in Signal Vermilion) -->
+  <rect x="578" y="248" width="460" height="260" fill="#141413" />
+  <rect x="570" y="240" width="460" height="260" fill="#FDECE9" stroke="#141413" stroke-width="5" />
+  <text x="800" y="325" text-anchor="middle" fill="#D9381E" font-family="ui-monospace, monospace" font-size="24" font-weight="800">
+    US-EAST-1 CONTROL PLANE
+  </text>
+  <text x="800" y="385" text-anchor="middle" fill="#141413" font-family="Georgia, serif" font-size="48" font-weight="900">
+    1 BAD CONFIG PUSH
+  </text>
+  <text x="800" y="445" text-anchor="middle" fill="#B02A14" font-family="ui-monospace, monospace" font-size="22" font-weight="700">
+    STATUS: CASCADING TIMEOUT (502/503)
+  </text>
+
+  <!-- Red Circle Callout -->
+  <ellipse cx="800" cy="370" rx="285" ry="180" fill="none" stroke="#D9381E" stroke-width="8" stroke-dasharray="22 10" />
+
+  <!-- Dependent Services Failing Below -->
+  <g transform="translate(140, 620)">
+    <rect x="0" y="0" width="380" height="140" fill="#FCFBF8" stroke="#141413" stroke-width="4" />
+    <text x="190" y="58" text-anchor="middle" fill="#141413" font-family="Georgia, serif" font-size="28" font-weight="800">Global News &amp; Media</text>
+    <text x="190" y="102" text-anchor="middle" fill="#D9381E" font-family="ui-monospace, monospace" font-size="20" font-weight="800">CDN ORIGIN UNREACHABLE</text>
+  </g>
+
+  <g transform="translate(610, 620)">
+    <rect x="0" y="0" width="380" height="140" fill="#FCFBF8" stroke="#141413" stroke-width="4" />
+    <text x="190" y="58" text-anchor="middle" fill="#141413" font-family="Georgia, serif" font-size="28" font-weight="800">SaaS &amp; Banking APIs</text>
+    <text x="190" y="102" text-anchor="middle" fill="#D9381E" font-family="ui-monospace, monospace" font-size="20" font-weight="800">AUTH TOKEN TIMEOUT</text>
+  </g>
+
+  <g transform="translate(1080, 620)">
+    <rect x="0" y="0" width="380" height="140" fill="#FCFBF8" stroke="#141413" stroke-width="4" />
+    <text x="190" y="58" text-anchor="middle" fill="#141413" font-family="Georgia, serif" font-size="28" font-weight="800">Smart Home &amp; POS</text>
+    <text x="190" y="102" text-anchor="middle" fill="#D9381E" font-family="ui-monospace, monospace" font-size="20" font-weight="800">OFFLINE BRICKED</text>
+  </g>
+
+  <!-- Cascade Arrows -->
+  <path d="M 660 510 L 350 610" fill="none" stroke="#D9381E" stroke-width="6" marker-end="url(#arrowRedOutage)" />
+  <path d="M 800 510 L 800 610" fill="none" stroke="#D9381E" stroke-width="6" marker-end="url(#arrowRedOutage)" />
+  <path d="M 940 510 L 1250 610" fill="none" stroke="#D9381E" stroke-width="6" marker-end="url(#arrowRedOutage)" />
+</svg>
