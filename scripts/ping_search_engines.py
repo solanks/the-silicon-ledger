@@ -8,7 +8,7 @@ and verifies `/sitemap.xml`, `/news-sitemap.xml`, and `/rss.xml`.
 import json
 import urllib.request
 
-SITE_HOST = "the-silicon-ledger.netlify.app"
+SITE_HOST = "siliconledger.io"
 SITE_URL = f"https://{SITE_HOST}"
 INDEXNOW_KEY = "thesiliconledgerindexnowkey2026"
 

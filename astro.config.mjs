@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import { rehypeInjectAds } from './src/plugins/rehype-inject-ads.mjs';
 
 export default defineConfig({
-  site: 'https://the-silicon-ledger.netlify.app',
+  site: 'https://siliconledger.io',
   output: 'static',
   markdown: {
     rehypePlugins: [[rehypeInjectAds, { interval: 3 }]]

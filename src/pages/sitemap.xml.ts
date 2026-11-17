@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 export const prerender = true;
 
 export const GET: APIRoute = async ({ site }) => {
-  const siteUrl = site?.origin ?? 'https://the-silicon-ledger.netlify.app';
+  const siteUrl = site?.origin ?? 'https://siliconledger.io';
   const articles = await getCollection('articles');
 
   const urls = [

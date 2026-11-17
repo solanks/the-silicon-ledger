@@ -14,5 +14,5 @@ Allow: /
 User-agent: Googlebot-Image
 Allow: /
 
-Sitemap: https://the-silicon-ledger.netlify.app/sitemap.xml
-Sitemap: https://the-silicon-ledger.netlify.app/news-sitemap.xml
+Sitemap: https://siliconledger.io/sitemap.xml
+Sitemap: https://siliconledger.io/news-sitemap.xml

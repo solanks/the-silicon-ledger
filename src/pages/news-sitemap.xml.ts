@@ -13,7 +13,7 @@ function escapeXml(unsafe: string): string {
 }
 
 export const GET: APIRoute = async ({ site }) => {
-  const siteUrl = site?.origin ?? 'https://the-silicon-ledger.netlify.app';
+  const siteUrl = site?.origin ?? 'https://siliconledger.io';
   const articles = (await getCollection('articles')).sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
