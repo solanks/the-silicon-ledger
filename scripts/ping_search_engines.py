@@ -17,6 +17,7 @@ URLS_TO_INDEX = [
     f"{SITE_URL}/about/",
     f"{SITE_URL}/privacy/",
     f"{SITE_URL}/contact/",
+    f"{SITE_URL}/articles/oled-monitor-vrr-flicker-burn-in-warranty-trap/",
     f"{SITE_URL}/articles/cloud-outage-monoculture-single-point-of-failure/",
     f"{SITE_URL}/articles/ai-search-traffic-heist-news-media-collapse/",
     f"{SITE_URL}/articles/day-one-flagship-firmware-beta-test-trap/",

@@ -83,9 +83,6 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
         <span class="text-stone-600">
           {readingTimeMinutes} min read
         </span>
-        <span class="border border-stone-400 bg-[#EFECE4] px-2 py-0.5 text-[11px] text-stone-700">
-          NewsArticle Schema · 1600×900 Discover Card
-        </span>
       </div>
 
       <h1
@@ -255,39 +252,6 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
             placement="sidebar-sticky"
             label="Sticky Rail (30s Refresh)"
           />
-
-          <!-- High-Contrast OpenGraph Image Preview Box -->
-          <div class="border-2 border-[#141413] bg-[#FCFBF8] p-4">
-            <div class="mb-2 flex items-center justify-between border-b border-stone-300 pb-1.5">
-              <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-[#141413]">
-                Social / Discover Card
-              </span>
-              <a
-                href={`/og/${article.slug}.svg`}
-                target="_blank"
-                class="font-mono text-[11px] font-bold text-[#D9381E] underline"
-              >
-                Full 1200×630
-              </a>
-            </div>
-            <a
-              href={`/og/${article.slug}.svg`}
-              target="_blank"
-              class="block border border-[#141413]"
-            >
-              <img
-                src={`/og/${article.slug}.svg`}
-                alt={`Generated OpenGraph image for ${title}`}
-                width="1200"
-                height="630"
-                loading="lazy"
-                class="h-auto w-full"
-              />
-            </a>
-            <p class="mt-2 font-mono text-[11px] leading-relaxed text-stone-600">
-              Auto-generated via <code>/og/{article.slug}.png</code>.
-            </p>
-          </div>
         </div>
       </aside>
     </div>

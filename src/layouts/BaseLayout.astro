@@ -89,6 +89,27 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
           </span>
         </div>
       </div>
+
+      <!-- Mobile Navigation Strip -->
+      <nav
+        aria-label="Mobile navigation"
+        class="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-stone-300 bg-[#EFECE4] px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-stone-700 md:hidden"
+      >
+        <a href="/" class="transition hover:text-[#D9381E]">Dispatches</a>
+        <a
+          href="/articles/skip-the-base-m5-macbook-pro-trap"
+          class="text-[#D9381E] underline decoration-2 underline-offset-4"
+        >
+          M5 Trap
+        </a>
+        <a href="/articles/snapdragon-8-elite-vs-a18-pro-review" class="transition hover:text-[#D9381E]">
+          SoC Bench
+        </a>
+        <a href="/articles/rtx-5090-laptop-gpu-benchmarks" class="transition hover:text-[#D9381E]">
+          GPUs
+        </a>
+        <a href="/about" class="transition hover:text-[#D9381E]">Methodology</a>
+      </nav>
     </header>
 
     <!-- Top Leaderboard Ad Slot (CLS-guarded) -->

@@ -7,7 +7,14 @@ export async function GET(context: APIContext) {
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
 
-  const siteUrl = context.site?.origin ?? 'https://techpulse.example.com';
+  const siteUrl = context.site?.origin ?? 'https://siliconledger.io';
+
+  const getMimeType = (src: string) => {
+    if (src.endsWith('.jpg') || src.endsWith('.jpeg')) return 'image/jpeg';
+    if (src.endsWith('.png')) return 'image/png';
+    if (src.endsWith('.webp')) return 'image/webp';
+    return 'image/svg+xml';
+  };
 
   return rss({
     title: 'The Silicon Ledger — Hardware & Silicon Benchmarks',
@@ -20,7 +27,7 @@ export async function GET(context: APIContext) {
       description: article.data.description,
       link: `/articles/${article.slug}/`,
       categories: [article.data.category, ...article.data.tags],
-      customData: `<enclosure url="${siteUrl}${article.data.heroImage.src}" type="image/svg+xml" />`
+      customData: `<enclosure url="${siteUrl}${article.data.heroImage.src}" type="${getMimeType(article.data.heroImage.src)}" />`
     }))
   });
 }

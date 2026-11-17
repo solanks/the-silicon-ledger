@@ -32,17 +32,17 @@ const articlesCollection = defineCollection({
           url: z
             .string()
             .url()
-            .default('https://techpulse.example.com/authors/editorial')
+            .default('https://siliconledger.io/about')
         })
         .default({}),
       /**
-       * Google Discover 1200px+ (1600x900) 16:9 image with dramatic lighting & visual callouts
+       * Google Discover 1200px+ (1600x900) 16:9 image with editorial hardware photography
        */
       heroImage: z
         .object({
           src: z
             .string()
-            .default('/images/articles/m5-macbook-pro-throttle-trap.svg'),
+            .default('/images/articles/m5-macbook-pro-throttle-trap.jpg'),
           alt: z.string().default('TechPulse Labs Hardware Teardown & Benchmark Analysis'),
           width: z.number().min(1200).default(1600),
           height: z.number().min(675).default(900),
