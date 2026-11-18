@@ -1,6 +1,4 @@
 ---
-import AdSlot from './AdSlot.astro';
-
 export interface UpgradeCandidate {
   id: string;
   name: string;
@@ -61,132 +59,116 @@ const {
 ---
 
 <section
-  class="upgrade-calculator-trap not-prose my-10 overflow-hidden rounded-2xl border border-stone-300 bg-[#FCFBF8] shadow-sm"
+  class="upgrade-calculator-trap not-prose my-10 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
   data-new-price={newDevicePriceUsd}
   data-new-compute={newDeviceComputeScore}
   data-new-bandwidth={newDeviceBandwidthGbS}
   data-new-name={newDeviceName}
 >
   <div
-    class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-[#141413] bg-[#EFECE4] px-5 py-3.5"
+    class="border-b border-slate-100 bg-slate-50 px-6 py-4"
   >
-    <div>
-      <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-[#D9381E]">
-        Interactive Upgrade Worksheet
-      </span>
-      <h3 class="font-serif text-xl font-extrabold text-[#141413]">
-        Should You Upgrade to {newDeviceName}?
-      </h3>
+    <div class="font-mono text-[11px] font-bold uppercase tracking-wider text-blue-600">
+      Interactive Upgrade Calculator
     </div>
-    <span class="font-mono text-xs text-stone-600">
-      Compare trade-in value vs. real-world bandwidth &amp; sustained compute
-    </span>
+    <h3 class="mt-0.5 font-sans text-lg font-extrabold text-slate-900">
+      Should You Upgrade to {newDeviceName}?
+    </h3>
   </div>
 
-  <div class="grid gap-6 p-5 lg:grid-cols-12 lg:items-center">
-    <div class="space-y-4 lg:col-span-7">
-      <div class="grid gap-3 sm:grid-cols-2">
-        <label class="block">
-          <span class="mb-1.5 block font-mono text-xs font-bold uppercase text-[#141413]">
-            1. Your Current Machine:
-          </span>
-          <select
-            class="calc-device-select w-full border-2 border-[#141413] bg-white px-3 py-2 font-mono text-xs font-semibold text-[#141413] focus:outline-none"
-          >
-            {
-              candidates.map((c, idx) => (
-                <option
-                  value={c.id}
-                  data-compute={c.computeScore}
-                  data-bandwidth={c.bandwidthGbS}
-                  data-resale={c.resaleValueUsd}
-                  selected={idx === 0}
-                >
-                  {c.name}
-                </option>
-              ))
-            }
-          </select>
-        </label>
+  <div class="space-y-4 p-6">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <label class="block">
+        <span class="mb-1.5 block font-sans text-xs font-bold text-slate-700">
+          1. Select Your Current Device:
+        </span>
+        <select
+          class="calc-device-select w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+        >
+          {
+            candidates.map((c, idx) => (
+              <option
+                value={c.id}
+                data-compute={c.computeScore}
+                data-bandwidth={c.bandwidthGbS}
+                data-resale={c.resaleValueUsd}
+                selected={idx === 0}
+              >
+                {c.name}
+              </option>
+            ))
+          }
+        </select>
+      </label>
 
-        <label class="block">
-          <span class="mb-1.5 block font-mono text-xs font-bold uppercase text-[#141413]">
-            2. Primary Workload:
-          </span>
-          <select
-            class="calc-workload-select w-full border-2 border-[#141413] bg-white px-3 py-2 font-mono text-xs font-semibold text-[#141413] focus:outline-none"
-          >
-            <option value="sustained">4K Video / Local AI / 3D (Sustained)</option>
-            <option value="burst">Web Dev / Office / Photo (Burst)</option>
-            <option value="gaming">AAA Gaming &amp; Ray Tracing</option>
-          </select>
-        </label>
-      </div>
+      <label class="block">
+        <span class="mb-1.5 block font-sans text-xs font-bold text-slate-700">
+          2. Select Your Primary Workload:
+        </span>
+        <select
+          class="calc-workload-select w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none"
+        >
+          <option value="sustained">Heavy Multitasking / Video / 3D (Sustained)</option>
+          <option value="burst">Everyday Web / Office / Travel (Burst)</option>
+          <option value="gaming">Gaming &amp; High-Refresh Display</option>
+        </select>
+      </label>
+    </div>
 
-      <div class="grid grid-cols-3 gap-3">
-        <div class="border border-[#141413] bg-[#F7F4EE] p-3 text-center">
-          <div class="font-mono text-[10px] font-bold uppercase text-stone-600">
-            Net Cash Outlay
-          </div>
-          <div class="calc-net-cost mt-1 font-mono text-xl font-extrabold text-[#141413]">
-            $819
-          </div>
-          <div class="calc-resale-note font-mono text-[10px] text-stone-600">
-            After $780 resale
-          </div>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-center">
+        <div class="font-mono text-[10px] font-semibold uppercase text-slate-400">
+          Net Upgrade Cost
         </div>
-
-        <div class="border border-[#141413] bg-[#F7F4EE] p-3 text-center">
-          <div class="font-mono text-[10px] font-bold uppercase text-stone-600">
-            Sustained Compute
-          </div>
-          <div class="calc-compute-delta mt-1 font-mono text-xl font-extrabold text-[#B45309]">
-            +3%
-          </div>
-          <div class="font-mono text-[10px] text-stone-600">
-            30m Cinebench
-          </div>
+        <div class="calc-net-cost mt-1 font-mono text-xl font-extrabold text-slate-900">
+          $819
         </div>
-
-        <div class="border border-[#141413] bg-[#F7F4EE] p-3 text-center">
-          <div class="font-mono text-[10px] font-bold uppercase text-stone-600">
-            Memory Bus Delta
-          </div>
-          <div class="calc-bw-delta mt-1 font-mono text-xl font-extrabold text-[#D9381E]">
-            -40%
-          </div>
-          <div class="font-mono text-[10px] text-stone-600">
-            120 vs 200 GB/s
-          </div>
+        <div class="calc-resale-note font-mono text-[10px] text-slate-500">
+          After $780 trade-in
         </div>
       </div>
 
-      <div
-        class="calc-verdict-box border-l-4 border-[#D9381E] bg-[#FDECE9] p-4"
-      >
-        <div class="flex items-center justify-between gap-2">
-          <span
-            class="calc-verdict-badge bg-[#D9381E] px-2.5 py-0.5 font-mono text-xs font-extrabold uppercase text-white"
-          >
-            HARD PASS — DOWNGRADE TRAP
-          </span>
-          <span class="calc-cost-per-pct font-mono text-xs font-bold text-[#141413]">
-            $248 per 1% speedup
-          </span>
+      <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-center">
+        <div class="font-mono text-[10px] font-semibold uppercase text-slate-400">
+          Speed Change
         </div>
-        <p class="calc-verdict-text mt-2 text-xs leading-relaxed text-[#141413]">
-          You would pay $819 out-of-pocket only to LOSE 40% of your memory bandwidth and gain +3% sustained multi-core score. Keep your current rig or buy a refurbished M4 Pro instead.
-        </p>
+        <div class="calc-compute-delta mt-1 font-mono text-xl font-extrabold text-amber-600">
+          +3%
+        </div>
+        <div class="font-mono text-[10px] text-slate-500">
+          Sustained Load
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-center">
+        <div class="font-mono text-[10px] font-semibold uppercase text-slate-400">
+          Bandwidth Delta
+        </div>
+        <div class="calc-bw-delta mt-1 font-mono text-xl font-extrabold text-rose-600">
+          -40%
+        </div>
+        <div class="font-mono text-[10px] text-slate-500">
+          Memory / Bus
+        </div>
       </div>
     </div>
 
-    <div class="lg:col-span-5">
-      <AdSlot
-        slotId="gam-scrolltrap-video-outstream"
-        placement="in-content"
-        label="Sponsored"
-        minHeight="min-h-[140px]"
-      />
+    <div
+      class="calc-verdict-box rounded-xl border border-rose-200 bg-rose-50/50 p-4"
+    >
+      <div class="flex items-center justify-between gap-2">
+        <span
+          class="calc-verdict-badge rounded-md bg-rose-600 px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase text-white"
+        >
+          Skip — Keep Your Current Gear
+        </span>
+        <span class="calc-cost-per-pct font-mono text-xs font-semibold text-slate-600">
+          $248 per 1% gain
+        </span>
+      </div>
+      <p class="calc-verdict-text mt-2 text-xs leading-relaxed text-slate-700">
+        You would pay $819 out-of-pocket for a negligible +3% sustained speedup. Keep your current setup or look at a discounted Pro tier instead.
+      </p>
     </div>
   </div>
 </section>
@@ -234,48 +216,48 @@ const {
           computeDeltaEl.textContent = `${effectiveComputePct >= 0 ? '+' : ''}${effectiveComputePct.toFixed(0)}%`;
           computeDeltaEl.className = `calc-compute-delta mt-1 font-mono text-xl font-extrabold ${
             effectiveComputePct >= 20
-              ? 'text-[#15803D]'
+              ? 'text-emerald-600'
               : effectiveComputePct >= 0
-                ? 'text-[#B45309]'
-                : 'text-[#D9381E]'
+                ? 'text-amber-600'
+                : 'text-rose-600'
           }`;
         }
 
         if (bwDeltaEl) {
           bwDeltaEl.textContent = `${bwPct >= 0 ? '+' : ''}${bwPct.toFixed(0)}%`;
           bwDeltaEl.className = `calc-bw-delta mt-1 font-mono text-xl font-extrabold ${
-            bwPct >= 0 ? 'text-[#15803D]' : 'text-[#D9381E]'
+            bwPct >= 0 ? 'text-emerald-600' : 'text-rose-600'
           }`;
         }
 
         if (effectiveComputePct <= 10 || bwPct < -10) {
-          if (verdictBox) verdictBox.className = 'calc-verdict-box border-l-4 border-[#D9381E] bg-[#FDECE9] p-4';
+          if (verdictBox) verdictBox.className = 'calc-verdict-box rounded-xl border border-rose-200 bg-rose-50/50 p-4';
           if (verdictBadge) {
-            verdictBadge.textContent = 'HARD PASS — DOWNGRADE TRAP';
+            verdictBadge.textContent = 'Skip — Poor Upgrade Value';
             verdictBadge.className =
-              'calc-verdict-badge bg-[#D9381E] px-2.5 py-0.5 font-mono text-xs font-extrabold uppercase text-white';
+              'calc-verdict-badge rounded-md bg-rose-600 px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase text-white';
           }
           if (costPerPctEl) {
             costPerPctEl.textContent =
               effectiveComputePct > 0
                 ? `$${Math.round(netCost / effectiveComputePct)} per 1% gain`
-                : 'Negative ROI';
+                : 'Low ROI';
           }
           if (verdictText) {
-            verdictText.textContent = `Paying $${netCost} out-of-pocket results in a ${bwPct.toFixed(0)}% memory bus change and only ${effectiveComputePct.toFixed(0)}% workload gain. Skip the base SKU or buy a refurbished Pro chip instead.`;
+            verdictText.textContent = `Paying $${netCost} out-of-pocket yields a ${bwPct.toFixed(0)}% bandwidth change and only ${effectiveComputePct.toFixed(0)}% workload gain. Keep your current setup or choose a discounted Pro tier.`;
           }
         } else {
-          if (verdictBox) verdictBox.className = 'calc-verdict-box border-l-4 border-[#15803D] bg-emerald-50 p-4';
+          if (verdictBox) verdictBox.className = 'calc-verdict-box rounded-xl border border-emerald-200 bg-emerald-50/50 p-4';
           if (verdictBadge) {
-            verdictBadge.textContent = 'SOLID UPGRADE FOR BURST WORKLOADS';
+            verdictBadge.textContent = 'Worthwhile Upgrade';
             verdictBadge.className =
-              'calc-verdict-badge bg-[#15803D] px-2.5 py-0.5 font-mono text-xs font-extrabold uppercase text-white';
+              'calc-verdict-badge rounded-md bg-emerald-600 px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase text-white';
           }
           if (costPerPctEl) {
             costPerPctEl.textContent = `$${Math.round(netCost / Math.max(1, effectiveComputePct))} per 1% gain`;
           }
           if (verdictText) {
-            verdictText.textContent = `Coming from ${opt.textContent?.trim()}, you gain +${effectiveComputePct.toFixed(0)}% burst responsiveness for $${netCost} net cost—though heavy 3D/video pros should still watch the 120 GB/s bus.`;
+            verdictText.textContent = `Upgrading from ${opt.textContent?.trim()} nets a +${effectiveComputePct.toFixed(0)}% boost for ~$${netCost} after trade-in.`;
           }
         }
       };

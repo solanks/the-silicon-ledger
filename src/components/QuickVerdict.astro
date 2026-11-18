@@ -20,81 +20,78 @@ const affiliateHref = buildAmazonAffiliateUrl(verdict.buyUrl || title, title);
 const scoreStyle =
   verdict.score >= 8.5
     ? {
-        bg: 'bg-[#15803D] text-white',
-        label: 'Lab Approved · Buy'
+        bg: 'bg-emerald-600 text-white',
+        label: 'Lab Approved'
       }
     : verdict.score >= 7.0
       ? {
-          bg: 'bg-[#B45309] text-white',
-          label: 'Conditional Buy'
+          bg: 'bg-amber-600 text-white',
+          label: 'Solid w/ Caveats'
         }
       : {
-          bg: 'bg-[#D9381E] text-white',
-          label: 'Buyer Beware · Skip'
+          bg: 'bg-rose-600 text-white',
+          label: 'Skip / Wait'
         };
 ---
 
 <section
-  class="not-prose my-8 overflow-hidden rounded-2xl border border-stone-300 bg-[#FCFBF8] shadow-sm"
+  class="not-prose my-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
   aria-labelledby="quick-verdict-heading"
 >
-  <!-- Top Masthead Strip -->
+  <!-- Top Bar -->
   <div
-    class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[#141413] bg-[#141413] px-5 py-3 text-[#F7F4EE]"
+    class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-900 px-6 py-3 text-white"
   >
     <h2
       id="quick-verdict-heading"
-      class="font-mono text-xs font-bold uppercase tracking-widest text-[#F7F4EE]"
+      class="font-mono text-xs font-bold uppercase tracking-widest text-white"
     >
-      The Lab Ledger · Executive Verdict
+      The Lab Verdict
     </h2>
 
     <div class="flex items-center gap-2 font-mono text-xs">
       {
         verdict.award && (
-          <span class="border border-[#F7F4EE] bg-[#D9381E] px-2.5 py-0.5 font-bold uppercase text-white">
+          <span class="rounded-md bg-rose-600 px-2.5 py-0.5 font-bold text-white">
             {verdict.award}
           </span>
         )
       }
       {
         verdict.price && (
-          <span class="border border-stone-600 bg-stone-800 px-2.5 py-0.5 text-stone-200">
-            Tested MSRP: {verdict.price}
+          <span class="rounded-md bg-slate-800 px-2.5 py-0.5 text-slate-200">
+            {verdict.price}
           </span>
         )
       }
     </div>
   </div>
 
-  <!-- Score Stamp + Summary Block -->
+  <!-- Score + Summary Block -->
   <div
-    class="grid gap-6 border-b-2 border-[#141413] p-6 md:grid-cols-[auto_1fr] md:items-center"
+    class="grid gap-6 border-b border-slate-100 p-6 md:grid-cols-[auto_1fr] md:items-center"
   >
     <div
       class:list={[
-        'flex flex-col items-center justify-center border-2 border-[#141413] px-6 py-5 text-center',
+        'flex flex-col items-center justify-center rounded-2xl px-6 py-4 text-center shadow-sm',
         scoreStyle.bg
       ]}
     >
       <div class="flex items-baseline gap-0.5">
-        <span class="font-serif text-5xl font-extrabold tracking-tight">
+        <span class="font-serif text-4xl font-extrabold tracking-tight">
           {verdict.score.toFixed(1)}
         </span>
-        <span class="font-mono text-sm font-bold opacity-85">/10</span>
+        <span class="font-mono text-xs font-bold opacity-80">/10</span>
       </div>
       <span
-        class="mt-1 border-t border-white/30 pt-1 font-mono text-[10px] font-bold uppercase tracking-widest"
+        class="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider"
       >
         {scoreStyle.label}
       </span>
     </div>
 
     <div class="space-y-3">
-      <div class="font-mono text-xs font-bold uppercase tracking-wider text-[#D9381E]">
-        Bottom Line · {title}
-      </div>
-      <p class="font-serif text-lg leading-relaxed text-[#141413]">
+      <p class="text-base leading-relaxed text-slate-700">
         {verdict.summary}
       </p>
       <div class="flex flex-wrap items-center gap-3 pt-1">
@@ -102,31 +99,29 @@ const scoreStyle =
           href={affiliateHref}
           target="_blank"
           rel="sponsored noopener noreferrer"
-          class="inline-flex items-center gap-2 border-2 border-[#141413] bg-[#D9381E] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white rounded-lg shadow-sm transition hover:bg-[#141413]"
+          class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-rose-600"
         >
-          <span>Check Amazon Street Price &amp; Deals →</span>
+          <span>View on Amazon</span>
+          <span>→</span>
         </a>
-        <span class="font-mono text-[10px] text-stone-500">
-          *Reader-supported Amazon Associate link
-        </span>
       </div>
     </div>
   </div>
 
-  <!-- Pros & Cons 2-Column Print Grid -->
-  <div class="grid divide-y-2 divide-[#141413] md:grid-cols-2 md:divide-x-2 md:divide-y-0">
+  <!-- Pros & Cons 2-Column Grid -->
+  <div class="grid divide-y divide-slate-100 md:grid-cols-2 md:divide-x md:divide-y-0">
     <!-- Pros -->
-    <div class="bg-[#F7F4EE] p-6">
+    <div class="bg-slate-50/40 p-6">
       <h3
-        class="mb-4 border-b border-stone-300 pb-2 font-mono text-xs font-bold uppercase tracking-widest text-[#15803D]"
+        class="mb-3 font-sans text-xs font-extrabold uppercase tracking-wider text-emerald-700"
       >
-        ✓ What Holds Up (The Good)
+        ✓ The Good
       </h3>
-      <ul class="space-y-2.5">
+      <ul class="space-y-2">
         {
           verdict.pros.map((pro) => (
-            <li class="flex items-start gap-2.5 text-sm leading-snug text-[#141413]">
-              <span class="mt-0.5 font-mono font-bold text-[#15803D]">+</span>
+            <li class="flex items-start gap-2 text-sm leading-snug text-slate-700">
+              <span class="mt-0.5 font-mono font-bold text-emerald-600">+</span>
               <span>{pro}</span>
             </li>
           ))
@@ -135,17 +130,17 @@ const scoreStyle =
     </div>
 
     <!-- Cons -->
-    <div class="bg-[#F7F4EE] p-6">
+    <div class="bg-slate-50/40 p-6">
       <h3
-        class="mb-4 border-b border-stone-300 pb-2 font-mono text-xs font-bold uppercase tracking-widest text-[#D9381E]"
+        class="mb-3 font-sans text-xs font-extrabold uppercase tracking-wider text-rose-600"
       >
-        ✕ Dealbreakers &amp; Cuts (The Bad)
+        ✕ The Bad
       </h3>
-      <ul class="space-y-2.5">
+      <ul class="space-y-2">
         {
           verdict.cons.map((con) => (
-            <li class="flex items-start gap-2.5 text-sm leading-snug text-[#141413]">
-              <span class="mt-0.5 font-mono font-bold text-[#D9381E]">−</span>
+            <li class="flex items-start gap-2 text-sm leading-snug text-slate-700">
+              <span class="mt-0.5 font-mono font-bold text-rose-600">−</span>
               <span>{con}</span>
             </li>
           ))

@@ -27,7 +27,7 @@ export interface Props {
 
 const {
   title = 'Lab Telemetry & Architecture Comparison',
-  subtitle = 'Percentages and color highlights (Green = Advantage, Red = Deficit) are calculated relative to the reference unit.',
+  subtitle = 'Green indicates an advantage vs. the baseline device; Red indicates a deficit.',
   baselineIndex = 0,
   devices = [],
   rows = []
@@ -111,29 +111,28 @@ const processedRows = rows.map((row) => {
 
 <section
   id={tableId}
-  class="spec-comparison-widget not-prose my-10 overflow-hidden rounded-2xl border border-stone-300 bg-[#FCFBF8] shadow-sm"
+  class="spec-comparison-widget not-prose my-10 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
   data-baseline-index={baselineIndex}
 >
   <!-- Header & Interactive Controls -->
   <div
-    class="flex flex-col justify-between gap-4 border-b-2 border-[#141413] bg-[#EFECE4] p-5 lg:flex-row lg:items-center"
+    class="flex flex-col justify-between gap-4 border-b border-slate-100 bg-slate-50 px-6 py-4 lg:flex-row lg:items-center"
   >
     <div>
-      <div class="font-mono text-[11px] font-bold uppercase tracking-widest text-[#D9381E]">
-        The Silicon Ledger · Lab Bench Datasheet
+      <div class="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        Benchmark Comparison Matrix
       </div>
-      <h3 class="mt-1 font-serif text-xl font-extrabold text-[#141413]">
+      <h3 class="mt-0.5 font-sans text-lg font-extrabold text-slate-900">
         {title}
       </h3>
-      <p class="mt-0.5 text-xs text-stone-600">{subtitle}</p>
+      <p class="mt-0.5 text-xs text-slate-500">{subtitle}</p>
     </div>
 
-    <!-- Interactive Baseline Switcher & Diff Filter -->
     <div class="flex flex-wrap items-center gap-3">
-      <label class="flex items-center gap-2 font-mono text-xs text-stone-800">
-        <span class="font-bold">Base (100%):</span>
+      <label class="flex items-center gap-2 font-mono text-xs text-slate-600">
+        <span class="font-semibold">Baseline:</span>
         <select
-          class="spec-baseline-select border border-[#141413] bg-white px-2.5 py-1.5 font-mono text-xs font-semibold text-[#141413] focus:outline-none"
+          class="spec-baseline-select rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 font-mono text-xs font-semibold text-slate-900 focus:outline-none"
         >
           {
             devices.map((dev, idx) => (
@@ -146,47 +145,24 @@ const processedRows = rows.map((row) => {
       </label>
 
       <label
-        class="inline-flex cursor-pointer items-center gap-2 border border-[#141413] bg-white px-3 py-1.5 font-mono text-xs font-semibold text-[#141413] select-none"
+        class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-xs font-semibold text-slate-700 select-none"
       >
         <input
           type="checkbox"
-          class="spec-diff-only-toggle h-3.5 w-3.5 accent-[#D9381E]"
+          class="spec-diff-only-toggle h-3.5 w-3.5 accent-rose-600"
         />
         <span>Only Differences</span>
       </label>
     </div>
   </div>
 
-  <!-- Legend Bar -->
-  <div
-    class="flex flex-wrap items-center justify-between gap-3 border-b border-stone-300 bg-[#F7F4EE] px-5 py-2 font-mono text-[11px] text-stone-700"
-  >
-    <div class="flex flex-wrap items-center gap-4">
-      <span class="inline-flex items-center gap-1.5">
-        <span class="h-2.5 w-2.5 bg-[#15803D]"></span>
-        <strong class="text-[#15803D]">Green:</strong> Advantage vs. Base
-      </span>
-      <span class="inline-flex items-center gap-1.5">
-        <span class="h-2.5 w-2.5 bg-[#D9381E]"></span>
-        <strong class="text-[#D9381E]">Red:</strong> Deficit vs. Base
-      </span>
-      <span class="inline-flex items-center gap-1.5">
-        <span class="h-2.5 w-2.5 bg-[#141413]"></span>
-        <strong class="text-[#141413]">100% Base:</strong> Reference Unit
-      </span>
-    </div>
-    <span class="uppercase text-stone-600">
-      ↑ Higher is better · ↓ Lower is better
-    </span>
-  </div>
-
   <!-- Responsive Comparison Table -->
   <div class="overflow-x-auto">
-    <table class="w-full min-w-[680px] border-collapse text-left text-sm">
+    <table class="w-full min-w-[660px] border-collapse text-left text-sm">
       <thead>
-        <tr class="border-b-2 border-[#141413] bg-[#141413] text-[#F7F4EE]">
+        <tr class="border-b border-slate-200 bg-slate-900 text-white">
           <th
-            class="w-56 px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider"
+            class="w-56 px-5 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-slate-300"
           >
             Metric / Test
           </th>
@@ -194,31 +170,31 @@ const processedRows = rows.map((row) => {
             devices.map((dev, idx) => (
               <th
                 class:list={[
-                  'spec-device-header border-l border-stone-700 px-4 py-3 align-top',
-                  idx === baselineIndex ? 'bg-stone-800' : ''
+                  'spec-device-header border-l border-slate-800 px-5 py-3.5 align-top',
+                  idx === baselineIndex ? 'bg-slate-800/80' : ''
                 ]}
                 data-col-index={idx}
               >
                 <div class="flex items-center justify-between gap-2">
-                  <span class="font-serif text-base font-bold text-white">
+                  <span class="font-sans text-sm font-bold text-white">
                     {dev.name}
                   </span>
                   {dev.isReviewed && (
-                    <span class="bg-[#D9381E] px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase text-white">
+                    <span class="rounded bg-rose-600 px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase text-white">
                       Tested
                     </span>
                   )}
                 </div>
-                <div class="mt-1 flex flex-wrap items-center gap-2 font-mono text-[11px] text-stone-300">
+                <div class="mt-1 flex flex-wrap items-center gap-2 font-mono text-[11px] text-slate-300">
                   {dev.chip && <span>{dev.chip}</span>}
                   {dev.price && (
                     <a
                       href={buildAmazonAffiliateUrl(dev.name)}
                       target="_blank"
                       rel="sponsored noopener noreferrer"
-                      class="border border-stone-500 bg-stone-900 px-1.5 py-0.5 text-amber-300 underline hover:bg-[#D9381E] hover:text-white"
+                      class="rounded bg-slate-800 px-2 py-0.5 text-slate-200 transition hover:bg-rose-600 hover:text-white"
                     >
-                      {dev.price} on Amazon ↗
+                      {dev.price} ↗
                     </a>
                   )}
                 </div>
@@ -227,62 +203,60 @@ const processedRows = rows.map((row) => {
           }
         </tr>
       </thead>
-      <tbody class="divide-y divide-stone-300">
+      <tbody class="divide-y divide-slate-100">
         {
           processedRows.map((row) => (
             <tr
-              class="spec-row hover:bg-[#EFECE4]/60"
+              class="spec-row hover:bg-slate-50/70"
               data-has-diff={row.hasDifference ? 'true' : 'false'}
               data-all-numeric={row.allNumeric ? 'true' : 'false'}
               data-higher-better={row.higherIsBetter ? 'true' : 'false'}
               data-unit={row.unit ?? ''}
             >
-              <!-- Metric Label Column -->
-              <td class="px-4 py-3 align-middle">
+              <td class="px-5 py-3 align-middle">
                 {row.category && (
-                  <div class="font-mono text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                  <div class="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
                     {row.category}
                   </div>
                 )}
-                <div class="font-semibold text-[#141413]">{row.label}</div>
+                <div class="font-semibold text-slate-900">{row.label}</div>
                 {row.allNumeric && (
-                  <div class="mt-0.5 font-mono text-[10px] text-stone-600">
+                  <div class="mt-0.5 font-mono text-[10px] text-slate-400">
                     {row.higherIsBetter ? '↑ Higher better' : '↓ Lower better'}
                     {row.unit ? ` (${row.unit})` : ''}
                   </div>
                 )}
               </td>
 
-              <!-- Device Value Columns -->
               {row.cells.map((cell, colIdx) => {
                 const cellBgClass =
                   cell.status === 'better'
-                    ? 'bg-emerald-50/90 border-l-4 border-[#15803D]'
+                    ? 'bg-emerald-50/50 border-l-2 border-emerald-500'
                     : cell.status === 'worse'
-                      ? 'bg-[#FDECE9] border-l-4 border-[#D9381E]'
+                      ? 'bg-rose-50/50 border-l-2 border-rose-500'
                       : cell.status === 'baseline'
-                        ? 'bg-[#EFECE4] border-l-4 border-[#141413]'
-                        : 'border-l border-stone-200';
+                        ? 'bg-slate-50/80 border-l-2 border-slate-400'
+                        : 'border-l border-slate-100';
 
                 const badgeClass =
                   cell.status === 'better'
-                    ? 'bg-[#15803D] text-white'
+                    ? 'bg-emerald-100 text-emerald-800'
                     : cell.status === 'worse'
-                      ? 'bg-[#D9381E] text-white'
+                      ? 'bg-rose-100 text-rose-800'
                       : cell.status === 'baseline'
-                        ? 'bg-[#141413] text-white'
-                        : 'bg-stone-200 text-stone-700';
+                        ? 'bg-slate-200 text-slate-700'
+                        : 'bg-slate-100 text-slate-500';
 
                 const barClass =
                   cell.status === 'better'
-                    ? 'bg-[#15803D]'
+                    ? 'bg-emerald-500'
                     : cell.status === 'worse'
-                      ? 'bg-[#D9381E]'
-                      : 'bg-[#141413]';
+                      ? 'bg-rose-500'
+                      : 'bg-slate-500';
 
                 const formattedDelta =
                   cell.isBaseline && row.allNumeric
-                    ? '100% (Base)'
+                    ? '100%'
                     : cell.deltaPct !== null
                       ? `${cell.deltaPct > 0 ? '+' : ''}${cell.deltaPct.toFixed(0)}%`
                       : !row.allNumeric && !cell.isBaseline && row.hasDifference
@@ -292,7 +266,7 @@ const processedRows = rows.map((row) => {
                 return (
                   <td
                     class:list={[
-                      'spec-cell px-4 py-3 align-middle',
+                      'spec-cell px-5 py-3 align-middle',
                       cellBgClass
                     ]}
                     data-col-index={colIdx}
@@ -304,10 +278,10 @@ const processedRows = rows.map((row) => {
                         class:list={[
                           'spec-value-text font-mono text-sm font-bold',
                           cell.status === 'better'
-                            ? 'text-[#15803D]'
+                            ? 'text-emerald-700'
                             : cell.status === 'worse'
-                              ? 'text-[#B02A14]'
-                              : 'text-[#141413]'
+                              ? 'text-rose-700'
+                              : 'text-slate-900'
                         ]}
                       >
                         {cell.rawVal}
@@ -318,7 +292,7 @@ const processedRows = rows.map((row) => {
 
                       <span
                         class:list={[
-                          'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold',
+                          'spec-delta-badge rounded px-1.5 py-0.5 font-mono text-[10px] font-bold',
                           badgeClass
                         ]}
                       >
@@ -327,10 +301,10 @@ const processedRows = rows.map((row) => {
                     </div>
 
                     {row.allNumeric && (
-                      <div class="mt-2 h-2 w-full bg-stone-300">
+                      <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                         <div
                           class:list={[
-                            'spec-bar h-full transition-all duration-300',
+                            'spec-bar h-full rounded-full transition-all duration-300',
                             barClass
                           ]}
                           style={`width: ${cell.barWidthPct}%`}
@@ -383,7 +357,7 @@ const processedRows = rows.map((row) => {
             if (allNumeric && Number.isFinite(numVal) && Number.isFinite(baseNum) && baseNum !== 0) {
               const delta = ((numVal - baseNum) / Math.abs(baseNum)) * 100;
               if (isBase) {
-                badgeText = '100% (Base)';
+                badgeText = '100%';
               } else {
                 badgeText = `${delta > 0 ? '+' : ''}${delta.toFixed(0)}%`;
                 if (Math.abs(delta) >= 1.0) {
@@ -405,25 +379,25 @@ const processedRows = rows.map((row) => {
             const bar = cell.querySelector('.spec-bar');
 
             if (status === 'better') {
-              cell.className = 'spec-cell px-4 py-3 align-middle bg-emerald-50/90 border-l-4 border-[#15803D]';
-              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-[#15803D]';
-              if (badge) badge.className = 'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold bg-[#15803D] text-white';
-              if (bar) bar.className = 'spec-bar h-full transition-all duration-300 bg-[#15803D]';
+              cell.className = 'spec-cell px-5 py-3 align-middle bg-emerald-50/50 border-l-2 border-emerald-500';
+              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-emerald-700';
+              if (badge) badge.className = 'spec-delta-badge rounded px-1.5 py-0.5 font-mono text-[10px] font-bold bg-emerald-100 text-emerald-800';
+              if (bar) bar.className = 'spec-bar h-full rounded-full transition-all duration-300 bg-emerald-500';
             } else if (status === 'worse') {
-              cell.className = 'spec-cell px-4 py-3 align-middle bg-[#FDECE9] border-l-4 border-[#D9381E]';
-              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-[#B02A14]';
-              if (badge) badge.className = 'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold bg-[#D9381E] text-white';
-              if (bar) bar.className = 'spec-bar h-full transition-all duration-300 bg-[#D9381E]';
+              cell.className = 'spec-cell px-5 py-3 align-middle bg-rose-50/50 border-l-2 border-rose-500';
+              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-rose-700';
+              if (badge) badge.className = 'spec-delta-badge rounded px-1.5 py-0.5 font-mono text-[10px] font-bold bg-rose-100 text-rose-800';
+              if (bar) bar.className = 'spec-bar h-full rounded-full transition-all duration-300 bg-rose-500';
             } else if (status === 'baseline') {
-              cell.className = 'spec-cell px-4 py-3 align-middle bg-[#EFECE4] border-l-4 border-[#141413]';
-              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-[#141413]';
-              if (badge) badge.className = 'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold bg-[#141413] text-white';
-              if (bar) bar.className = 'spec-bar h-full transition-all duration-300 bg-[#141413]';
+              cell.className = 'spec-cell px-5 py-3 align-middle bg-slate-50/80 border-l-2 border-slate-400';
+              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-slate-900';
+              if (badge) badge.className = 'spec-delta-badge rounded px-1.5 py-0.5 font-mono text-[10px] font-bold bg-slate-200 text-slate-700';
+              if (bar) bar.className = 'spec-bar h-full rounded-full transition-all duration-300 bg-slate-500';
             } else {
-              cell.className = 'spec-cell px-4 py-3 align-middle border-l border-stone-200';
-              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-[#141413]';
-              if (badge) badge.className = 'spec-delta-badge px-1.5 py-0.5 font-mono text-[11px] font-bold bg-stone-200 text-stone-700';
-              if (bar) bar.className = 'spec-bar h-full transition-all duration-300 bg-[#141413]';
+              cell.className = 'spec-cell px-5 py-3 align-middle border-l border-slate-100';
+              if (valText) valText.className = 'spec-value-text font-mono text-sm font-bold text-slate-900';
+              if (badge) badge.className = 'spec-delta-badge rounded px-1.5 py-0.5 font-mono text-[10px] font-bold bg-slate-100 text-slate-500';
+              if (bar) bar.className = 'spec-bar h-full rounded-full transition-all duration-300 bg-slate-500';
             }
 
             if (badge) badge.textContent = badgeText;

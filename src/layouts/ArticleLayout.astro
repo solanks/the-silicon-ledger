@@ -83,7 +83,6 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
         <span class="text-slate-500">
           · {readingTimeMinutes} min read
         </span>
-        <!-- Top Clickable Tag Pills -->
         <div class="flex flex-wrap items-center gap-1.5 pl-1">
           {
             tags.slice(0, 4).map((tag) => (
@@ -99,14 +98,14 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
       </div>
 
       <h1
-        class="font-serif text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-[52px]"
+        class="font-serif text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-[50px]"
       >
         {title}
       </h1>
 
       {
         subtitle && (
-          <p class="mt-4 max-w-4xl font-serif text-xl leading-relaxed text-slate-600 sm:text-2xl">
+          <p class="mt-4 max-w-4xl text-lg leading-relaxed text-slate-600 sm:text-xl">
             {subtitle}
           </p>
         )
@@ -192,31 +191,13 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
     <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
       <!-- Primary Article Column (8 cols) -->
       <div class="lg:col-span-8">
-        <!-- Above-the-Fold Polarized Two-Option Poll -->
-        <PolarizedPoll
-          pollId={article.slug}
-          question={poll.question}
-          optionA={{
-            label: poll.optionALabel,
-            subtext: poll.optionASubtext,
-            initialVotes: poll.optionAVotes
-          }}
-          optionB={{
-            label: poll.optionBLabel,
-            subtext: poll.optionBSubtext,
-            initialVotes: poll.optionBVotes
-          }}
-          hotTakeQuote={poll.hotTakeQuote}
-          hotTakeAuthor={poll.hotTakeAuthor}
-        />
-
         <!-- Quick Verdict / Pros & Cons at the top of every article template -->
         <QuickVerdict title={title} verdict={verdict} />
 
-        <!-- Article MDX Body -->
+        <!-- Article MDX Body with Distinct Section Heading Styling -->
         <div
           id="article-prose-body"
-          class="prose prose-slate max-w-none prose-headings:font-serif prose-headings:font-extrabold prose-headings:text-slate-900 prose-p:text-[17px] prose-p:leading-[1.75] prose-p:text-slate-800 prose-a:font-semibold prose-a:text-rose-600 prose-strong:text-slate-900 prose-code:rounded prose-code:border prose-code:border-slate-200 prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-slate-900"
+          class="prose prose-slate max-w-none prose-headings:font-sans prose-h2:mt-12 prose-h2:mb-4 prose-h2:border-l-4 prose-h2:border-rose-600 prose-h2:pl-3.5 prose-h2:text-2xl prose-h2:font-extrabold prose-h2:tracking-tight prose-h2:text-slate-900 sm:prose-h2:text-[26px] prose-h3:mt-8 prose-h3:mb-2 prose-h3:text-lg prose-h3:font-bold prose-h3:text-rose-700 prose-p:text-[17px] prose-p:leading-[1.8] prose-p:text-slate-700 prose-a:font-semibold prose-a:text-rose-600 prose-strong:font-bold prose-strong:text-slate-900 prose-code:rounded prose-code:border prose-code:border-slate-200 prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-slate-900"
         >
           <slot />
         </div>
@@ -234,8 +215,26 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
           )
         }
 
+        <!-- Compact Reader Poll (Moved to the end of the article so it doesn't clutter the top) -->
+        <PolarizedPoll
+          pollId={article.slug}
+          question={poll.question}
+          optionA={{
+            label: poll.optionALabel,
+            subtext: poll.optionASubtext,
+            initialVotes: poll.optionAVotes
+          }}
+          optionB={{
+            label: poll.optionBLabel,
+            subtext: poll.optionBSubtext,
+            initialVotes: poll.optionBVotes
+          }}
+          hotTakeQuote={poll.hotTakeQuote}
+          hotTakeAuthor={poll.hotTakeAuthor}
+        />
+
         <!-- Clickable Article Tags Footer -->
-        <div class="mt-10 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-6">
+        <div class="mt-8 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-6">
           <span class="font-mono text-xs font-bold uppercase tracking-wider text-slate-500">
             Explore Related Topics:
           </span>
@@ -253,12 +252,12 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
       </div>
 
       <!-- Sticky Sidebar Rail (4 cols) -->
-      <aside class="lg:col-span-4" aria-label="Sidebar & High-Viewability Ad Rail">
+      <aside class="lg:col-span-4" aria-label="Sidebar & Partner Rail">
         <div class="sticky top-20 space-y-6">
           <AdSlot
             slotId="gam-sidebar-sticky-300x600"
             placement="sidebar-sticky"
-            label="Sticky Rail (30s Refresh)"
+            label="Sponsored"
           />
         </div>
       </aside>
