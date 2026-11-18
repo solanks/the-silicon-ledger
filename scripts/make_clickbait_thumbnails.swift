@@ -135,7 +135,7 @@ for (newFile, sourceFile) in baseMapping {
 let width: Int = 1600
 let height: Int = 900
 
-for spec in specs where newlyCreated.contains(spec.filename) || CommandLine.arguments.contains("--all") {
+for spec in specs where CommandLine.arguments.contains("--force-overwrite-curated") {
     let fileUrl = dir.appendingPathComponent(spec.filename)
     guard let srcImage = NSImage(contentsOf: fileUrl) else {
         print("Skipping missing \(spec.filename)")
