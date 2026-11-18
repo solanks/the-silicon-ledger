@@ -1,4 +1,6 @@
 ---
+import { buildAmazonAffiliateUrl } from '../config/monetization';
+
 export interface StreetPriceEntry {
   modelName: string;
   sourceLabel: string;
@@ -27,9 +29,11 @@ const {
 
 const computedEntries = entries.map((e) => {
   const costPerUnit = e.benchmarkMetric > 0 ? e.priceUsd / e.benchmarkMetric : 0;
+  const amazonUrl = buildAmazonAffiliateUrl(e.modelName);
   return {
     ...e,
-    costPerUnit
+    costPerUnit,
+    amazonUrl
   };
 });
 
@@ -126,6 +130,22 @@ const bestCostPerUnit = Math.min(
                 >
                   ${entry.costPerUnit.toFixed(2)}
                 </strong>
+              </div>
+
+              <div class="pt-2">
+                <a
+                  href={entry.amazonUrl}
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  class:list={[
+                    'block w-full border border-[#141413] px-3 py-1.5 text-center font-mono text-[11px] font-bold uppercase transition',
+                    isBestValue
+                      ? 'bg-[#15803D] text-white hover:bg-[#141413]'
+                      : 'bg-white text-[#141413] hover:bg-[#141413] hover:text-white'
+                  ]}
+                >
+                  {isBestValue ? '★ Check Smart-Buy Deal on Amazon →' : 'Compare Price on Amazon →'}
+                </a>
               </div>
             </div>
           </div>

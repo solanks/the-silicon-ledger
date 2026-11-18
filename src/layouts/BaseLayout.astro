@@ -70,23 +70,14 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
           </nav>
         </div>
 
-        <!-- Compact Technical Ad Telemetry Strip -->
+        <!-- Editorial Desk Tag -->
         <div
-          class="flex flex-wrap items-center gap-3 border border-stone-900 bg-[#EFECE4] px-3 py-1 font-mono text-[11px] text-stone-800"
+          class="hidden items-center gap-2 border border-stone-900 bg-[#EFECE4] px-3 py-1 font-mono text-[11px] font-semibold text-stone-800 sm:flex"
         >
-          <span>
-            Units: <strong id="hud-total-ads" class="font-bold text-[#141413]">0</strong>
-          </span>
-          <span class="text-stone-400">/</span>
-          <span>
-            IAB Viewable:{' '}
-            <strong id="hud-viewable-ads" class="font-bold text-emerald-800">0%</strong>
-          </span>
-          <span class="text-stone-400">/</span>
-          <span>
-            30s Cycles:{' '}
-            <strong id="hud-refresh-count" class="font-bold text-[#D9381E]">0</strong>
-          </span>
+          <span class="h-2 w-2 rounded-full bg-[#D9381E]"></span>
+          <a href="/about" class="hover:text-[#D9381E]">
+            Independent Hardware Lab · Zero Sponsored Scores
+          </a>
         </div>
       </div>
 

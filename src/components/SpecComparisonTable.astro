@@ -1,4 +1,6 @@
 ---
+import { buildAmazonAffiliateUrl } from '../config/monetization';
+
 export interface DeviceSpecHeader {
   name: string;
   chip?: string;
@@ -210,9 +212,14 @@ const processedRows = rows.map((row) => {
                 <div class="mt-1 flex flex-wrap items-center gap-2 font-mono text-[11px] text-stone-300">
                   {dev.chip && <span>{dev.chip}</span>}
                   {dev.price && (
-                    <span class="border border-stone-600 px-1.5 py-0.5 text-stone-200">
-                      {dev.price}
-                    </span>
+                    <a
+                      href={buildAmazonAffiliateUrl(dev.name)}
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      class="border border-stone-500 bg-stone-900 px-1.5 py-0.5 text-amber-300 underline hover:bg-[#D9381E] hover:text-white"
+                    >
+                      {dev.price} on Amazon ↗
+                    </a>
                   )}
                 </div>
               </th>

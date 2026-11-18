@@ -10,6 +10,8 @@ const allArticles = (await getCollection('articles')).sort(
 
 const featuredArticle =
   allArticles.find((a) => a.data.featured) ?? allArticles[0];
+
+const gridArticles = allArticles.filter((a) => a.slug !== featuredArticle?.slug);
 ---
 
 <BaseLayout
@@ -97,7 +99,7 @@ const featuredArticle =
 
       <div class="grid gap-6 sm:grid-cols-2">
         {
-          allArticles.map((article) => (
+          gridArticles.map((article) => (
             <article class="group flex flex-col justify-between border-2 border-[#141413] bg-[#FCFBF8] shadow-[4px_4px_0px_#141413]">
               <div>
                 <a

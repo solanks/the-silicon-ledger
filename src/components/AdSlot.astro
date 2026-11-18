@@ -46,27 +46,14 @@ const adsenseClientId =
   aria-label={`Advertisement: ${label}`}
 >
   <div
-    class="mb-2 flex flex-wrap items-center justify-between gap-2 border-b border-stone-300 pb-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-stone-600"
+    class="mb-2 flex items-center justify-between border-b border-stone-300 pb-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-stone-600"
   >
-    <span>Advertisement · {label}</span>
-    <div class="flex items-center gap-2">
-      <span
-        class="ad-refresh-badge border border-stone-400 bg-[#F7F4EE] px-2 py-0.5 font-mono text-[10px] text-stone-700"
-      >
-        ↻ Refresh #0 (30s)
-      </span>
-      <span
-        class="ad-viewability-badge border border-amber-700 bg-amber-50 px-2 py-0.5 font-mono text-[10px] text-amber-900"
-        data-viewability-status="pending"
-      >
-        IAB: Pending…
-      </span>
-    </div>
+    <span>Advertisement</span>
   </div>
 
   <div
     class:list={[
-      'ad-unit-box relative flex w-full flex-col items-center justify-center border border-dashed border-stone-400 bg-[#F7F4EE] p-4 text-center transition-all duration-300',
+      'ad-unit-box relative flex w-full flex-col items-center justify-center border border-dashed border-stone-300 bg-[#F7F4EE] p-4 text-center transition-all duration-300',
       minHeight
     ]}
   >
@@ -78,17 +65,5 @@ const adsenseClientId =
       data-ad-format="auto"
       data-full-width-responsive="true"
     />
-
-    <div
-      class="mt-2 flex flex-wrap items-center justify-center gap-3 border border-stone-300 bg-white px-3 py-1 font-mono text-[11px] text-stone-700"
-    >
-      <span>AdSense: <strong class="text-[#141413]">{adsenseClientId}</strong></span>
-      <span class="text-stone-300">|</span>
-      <span>Dwell: <strong class="ad-dwell-timer text-emerald-800">0.0s</strong></span>
-      <span class="text-stone-300">|</span>
-      <span>Next Refresh: <strong class="ad-next-refresh text-[#D9381E]">30.0s</strong></span>
-      <span class="text-stone-300">|</span>
-      <span>In-View: <strong class="ad-ratio-readout text-[#141413]">0%</strong></span>
-    </div>
   </div>
 </aside>

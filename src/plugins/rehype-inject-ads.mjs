@@ -97,53 +97,7 @@ function createInContentAdNode(adIndex, afterParagraph) {
             children: [
               {
                 type: 'text',
-                value: `Advertisement · In-Article Unit #${adIndex} (After ¶${afterParagraph})`
-              }
-            ]
-          },
-          {
-            type: 'element',
-            tagName: 'div',
-            properties: {
-              className: ['flex', 'items-center', 'gap-2']
-            },
-            children: [
-              {
-                type: 'element',
-                tagName: 'span',
-                properties: {
-                  className: [
-                    'ad-refresh-badge',
-                    'border',
-                    'border-stone-400',
-                    'bg-[#F7F4EE]',
-                    'px-2',
-                    'py-0.5',
-                    'font-mono',
-                    'text-[10px]',
-                    'text-stone-700'
-                  ]
-                },
-                children: [{ type: 'text', value: '↻ Refresh #0 (30s)' }]
-              },
-              {
-                type: 'element',
-                tagName: 'span',
-                properties: {
-                  className: [
-                    'ad-viewability-badge',
-                    'border',
-                    'border-amber-700',
-                    'bg-amber-50',
-                    'px-2',
-                    'py-0.5',
-                    'font-mono',
-                    'text-[10px]',
-                    'text-amber-900'
-                  ],
-                  'data-viewability-status': 'pending'
-                },
-                children: [{ type: 'text', value: 'IAB: Pending…' }]
+                value: 'Advertisement'
               }
             ]
           }
@@ -164,7 +118,7 @@ function createInContentAdNode(adIndex, afterParagraph) {
             'justify-center',
             'border',
             'border-dashed',
-            'border-stone-400',
+            'border-stone-300',
             'bg-[#F7F4EE]',
             'p-6',
             'text-center'
@@ -182,94 +136,6 @@ function createInContentAdNode(adIndex, afterParagraph) {
               'data-full-width-responsive': 'true'
             },
             children: []
-          },
-          {
-            type: 'element',
-            tagName: 'div',
-            properties: {
-              className: [
-                'mb-2',
-                'border',
-                'border-[#141413]',
-                'bg-[#EFECE4]',
-                'px-3',
-                'py-1',
-                'font-mono',
-                'text-xs',
-                'font-bold',
-                'text-[#141413]'
-              ]
-            },
-            children: [
-              {
-                type: 'text',
-                value: `AdSense In-Article Unit (${slotId}) · ca-pub-6428626874238056`
-              }
-            ]
-          },
-          {
-            type: 'element',
-            tagName: 'p',
-            properties: {
-              className: ['max-w-md', 'text-xs', 'text-stone-600']
-            },
-            children: [
-              {
-                type: 'text',
-                value:
-                  'CLS-reserved container (min-h-[250px]) injected after every 3rd paragraph.'
-              }
-            ]
-          },
-          {
-            type: 'element',
-            tagName: 'div',
-            properties: {
-              className: [
-                'mt-2.5',
-                'flex',
-                'items-center',
-                'gap-3',
-                'border',
-                'border-stone-300',
-                'bg-white',
-                'px-3',
-                'py-1',
-                'font-mono',
-                'text-[11px]',
-                'text-stone-700'
-              ]
-            },
-            children: [
-              {
-                type: 'element',
-                tagName: 'span',
-                properties: {},
-                children: [
-                  { type: 'text', value: 'Dwell: ' },
-                  {
-                    type: 'element',
-                    tagName: 'strong',
-                    properties: { className: ['ad-dwell-timer', 'text-emerald-800'] },
-                    children: [{ type: 'text', value: '0.0s' }]
-                  }
-                ]
-              },
-              {
-                type: 'element',
-                tagName: 'span',
-                properties: {},
-                children: [
-                  { type: 'text', value: 'Next Refresh: ' },
-                  {
-                    type: 'element',
-                    tagName: 'strong',
-                    properties: { className: ['ad-next-refresh', 'text-[#D9381E]'] },
-                    children: [{ type: 'text', value: '30.0s' }]
-                  }
-                ]
-              }
-            ]
           }
         ]
       }

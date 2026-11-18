@@ -1,4 +1,6 @@
 ---
+import { buildAmazonAffiliateUrl } from '../config/monetization';
+
 export interface Props {
   title: string;
   verdict: {
@@ -13,6 +15,7 @@ export interface Props {
 }
 
 const { title, verdict } = Astro.props;
+const affiliateHref = buildAmazonAffiliateUrl(verdict.buyUrl || title, title);
 
 const scoreStyle =
   verdict.score >= 8.5
@@ -94,20 +97,19 @@ const scoreStyle =
       <p class="font-serif text-lg leading-relaxed text-[#141413]">
         {verdict.summary}
       </p>
-      {
-        verdict.buyUrl && (
-          <div class="pt-1">
-            <a
-              href={verdict.buyUrl}
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              class="inline-flex items-center gap-2 border-2 border-[#141413] bg-[#D9381E] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#141413]"
-            >
-              <span>Check Street Price &amp; Stock →</span>
-            </a>
-          </div>
-        )
-      }
+      <div class="flex flex-wrap items-center gap-3 pt-1">
+        <a
+          href={affiliateHref}
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          class="inline-flex items-center gap-2 border-2 border-[#141413] bg-[#D9381E] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white shadow-[3px_3px_0px_#141413] transition hover:bg-[#141413]"
+        >
+          <span>Check Amazon Street Price &amp; Deals →</span>
+        </a>
+        <span class="font-mono text-[10px] text-stone-500">
+          *Reader-supported Amazon Associate link
+        </span>
+      </div>
     </div>
   </div>
 
