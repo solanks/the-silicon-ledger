@@ -7,14 +7,14 @@ export default defineConfig({
   site: 'https://siliconledger.io',
   output: 'static',
   markdown: {
-    rehypePlugins: [[rehypeInjectAds, { interval: 3 }]]
+    rehypePlugins: [[rehypeInjectAds, { interval: 5 }]]
   },
   integrations: [
     tailwind({
       applyBaseStyles: true
     }),
     mdx({
-      rehypePlugins: [[rehypeInjectAds, { interval: 3 }]]
+      rehypePlugins: [[rehypeInjectAds, { interval: 5 }]]
     })
   ]
 });

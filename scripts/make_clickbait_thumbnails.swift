@@ -100,6 +100,14 @@ let specs: [ClickbaitSpec] = [
         calloutLabel: "5G MODEM EATS 24% MORE!",
         targetX: 1040,
         targetY: 450
+    ),
+    ClickbaitSpec(
+        filename: "ipad-pro-oled-vs-ipad-air-magic-keyboard-trap.jpg",
+        topBanner: "$1,650 IPAD PRO REGRET!",
+        stampText: "$349 KEYBOARD?!",
+        calloutLabel: "HEAVIER THAN MACBOOK!",
+        targetX: 1050,
+        targetY: 430
     )
 ]
 
@@ -110,7 +118,8 @@ let baseMapping: [(String, String)] = [
     ("8gb-vram-gpu-obsolescence-trap-2026.jpg", "rtx-5090-laptop-gpu.jpg"),
     ("anker-vs-ugreen-gan-charger-throttling-test.jpg", "day-one-firmware-beta-trap.jpg"),
     ("flagship-anc-earbuds-battery-degradation-test.jpg", "media-traffic-heist.jpg"),
-    ("google-pixel-tensor-modem-battery-drain-test.jpg", "snapdragon-8-elite-vs-a18-pro.jpg")
+    ("google-pixel-tensor-modem-battery-drain-test.jpg", "snapdragon-8-elite-vs-a18-pro.jpg"),
+    ("ipad-pro-oled-vs-ipad-air-magic-keyboard-trap.jpg", "m5-macbook-pro-throttle-trap.jpg")
 ]
 
 var newlyCreated = Set<String>()

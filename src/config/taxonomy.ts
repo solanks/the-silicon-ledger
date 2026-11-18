@@ -23,10 +23,12 @@ export function slugifyTag(tag: string): string {
 export const TOP_CATEGORY_GROUPS: NavCategoryGroup[] = [
   {
     slug: 'laptops-pc',
-    label: 'Laptops & PC',
-    description: 'MacBooks, Gaming Laptops, Desktop GPUs, CPUs & OLED Monitors.',
+    label: 'Mac, iPad & PC',
+    description: 'MacBook Pro & Air, iPad Pro & iPad Air, Gaming GPUs, CPUs & OLED Monitors.',
     categoriesMatched: ['Laptops & GPUs', 'Silicon & SoCs', 'Displays & Audio'],
     tagsMatched: [
+      'Mac',
+      'iPad',
       'M5 MacBook Pro',
       'Apple Silicon',
       'GPU Benchmarks',
@@ -36,19 +38,20 @@ export const TOP_CATEGORY_GROUPS: NavCategoryGroup[] = [
       'PC Gaming'
     ],
     subItems: [
-      { label: 'All Laptops & PC Hardware', href: '/category/laptops-pc' },
-      { label: 'MacBooks & Apple Silicon', href: '/tags/apple-silicon', badge: 'Hot' },
-      { label: 'GPUs & VRAM Benchmarks', href: '/tags/gpu-benchmarks' },
-      { label: 'OLED & Mini-LED Monitors', href: '/tags/oled-monitors' },
-      { label: 'Day-One Firmware Traps', href: '/articles/day-one-flagship-firmware-beta-test-trap' }
+      { label: 'Mac & MacBook Pro', href: '/tags/mac', badge: 'Hot' },
+      { label: 'iPad Pro & iPad Air', href: '/tags/ipad', badge: 'New' },
+      { label: 'PC GPUs & VRAM Benchmarks', href: '/tags/gpu-benchmarks' },
+      { label: 'OLED & Mac External Monitors', href: '/tags/oled-monitors' },
+      { label: 'All Mac, iPad & PC Reviews', href: '/category/laptops-pc' }
     ]
   },
   {
     slug: 'phones-mobile',
-    label: 'Phones & Android',
-    description: 'Google Pixel, Android Flagships, Snapdragon vs. A-Series & 5G Battery Tests.',
+    label: 'iPhone & Android',
+    description: 'iPhone 16/17 Pro, Google Pixel, Android Flagships & 5G Battery Tests.',
     categoriesMatched: ['Phones & Mobile', 'Smartphones', 'Silicon & SoCs'],
     tagsMatched: [
+      'iPhone',
       'Google Pixel',
       'Android',
       'Tensor Chip',
@@ -59,16 +62,17 @@ export const TOP_CATEGORY_GROUPS: NavCategoryGroup[] = [
       'Mobile Benchmarks'
     ],
     subItems: [
-      { label: 'All Phones & Mobile', href: '/category/phones-mobile' },
-      { label: 'Google Pixel & Android', href: '/tags/google-pixel', badge: 'New' },
-      { label: '5G Modem & Battery Tests', href: '/tags/5g-battery-drain' },
-      { label: 'Snapdragon vs. Apple Silicon', href: '/articles/snapdragon-8-elite-vs-a18-pro-review' }
+      { label: 'iPhone & Apple A-Series', href: '/tags/iphone', badge: 'Popular' },
+      { label: 'Google Pixel & Android', href: '/tags/google-pixel', badge: 'Tested' },
+      { label: 'iPad Cellular & Tablet Tech', href: '/tags/ipad' },
+      { label: '5G Modem & Battery Drain Lab', href: '/tags/5g-battery-drain' },
+      { label: 'All iPhone & Android Reports', href: '/category/phones-mobile' }
     ]
   },
   {
     slug: 'chargers-power',
     label: 'Chargers & Power',
-    description: 'Anker vs. Ugreen GaN Chargers, Power Banks, USB-C Cables & Thermal Tests.',
+    description: 'Anker vs. Ugreen GaN Chargers for Mac, iPhone, iPad & Pixel.',
     categoriesMatched: ['Chargers & Power'],
     tagsMatched: [
       'Anker',
@@ -78,16 +82,16 @@ export const TOP_CATEGORY_GROUPS: NavCategoryGroup[] = [
       'Power Banks'
     ],
     subItems: [
-      { label: 'All Chargers & Power Gear', href: '/category/chargers-power' },
-      { label: 'Anker Chargers & Power Banks', href: '/tags/anker', badge: 'Tested' },
+      { label: 'Anker Chargers & Power Banks', href: '/tags/anker', badge: 'Top Pick' },
       { label: 'Ugreen GaN Bricks & Docks', href: '/tags/ugreen' },
-      { label: 'GaN Thermal Throttling Tests', href: '/tags/gan-chargers' }
+      { label: 'Mac, iPad & iPhone Fast Charging', href: '/tags/gan-chargers' },
+      { label: 'All Chargers & Power Gear', href: '/category/chargers-power' }
     ]
   },
   {
     slug: 'audio-earbuds',
     label: 'Audio & Earbuds',
-    description: 'Wireless ANC Earbuds, Battery Longevity, Soundcore, Sony, Bose & Codecs.',
+    description: 'AirPods & Wireless ANC Earbuds, Soundcore, Sony, Bose & Battery Tests.',
     categoriesMatched: ['Audio & Earbuds', 'Displays & Audio'],
     tagsMatched: [
       'Earbuds',
@@ -96,10 +100,10 @@ export const TOP_CATEGORY_GROUPS: NavCategoryGroup[] = [
       'Bluetooth Codecs'
     ],
     subItems: [
-      { label: 'All Audio & Earbuds', href: '/category/audio-earbuds' },
-      { label: 'Wireless Earbuds & ANC', href: '/tags/earbuds', badge: 'Top Picks' },
-      { label: 'Soundcore & Value Audio', href: '/tags/soundcore' },
-      { label: 'ANC & Battery Degradation Lab', href: '/tags/anc-audio' }
+      { label: 'Wireless Earbuds & AirPods ANC', href: '/tags/earbuds', badge: 'Best Value' },
+      { label: 'Soundcore & $79 Challengers', href: '/tags/soundcore' },
+      { label: 'Earbud Battery Degradation Lab', href: '/tags/anc-audio' },
+      { label: 'All Audio & Earbuds', href: '/category/audio-earbuds' }
     ]
   },
   {
@@ -115,10 +119,10 @@ export const TOP_CATEGORY_GROUPS: NavCategoryGroup[] = [
       'Wallet Protector'
     ],
     subItems: [
-      { label: 'All Investigations', href: '/category/tech-investigations' },
       { label: 'Cloud & Internet Outages', href: '/tags/cloud-outages', badge: 'Live' },
       { label: 'AI & Media Traffic Heist', href: '/articles/ai-search-traffic-heist-news-media-collapse' },
-      { label: 'Buyer Advocacy & Traps', href: '/tags/buyer-advocacy' }
+      { label: 'Buyer Advocacy & Hardware Traps', href: '/tags/buyer-advocacy' },
+      { label: 'All Investigations', href: '/category/tech-investigations' }
     ]
   }
 ];

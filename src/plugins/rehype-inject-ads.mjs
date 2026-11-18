@@ -1,40 +1,24 @@
 /**
- * Rehype plugin that supports BOTH:
- * 1. Explicit `<!-- AD_SLOT -->` comment markers placed by the editorial agent
- * 2. Automatic injection after every 3rd top-level paragraph (<p>) when explicit markers are absent.
+ * Rehype plugin that injects a subtle, low-profile native sponsor slot
+ * after every Nth top-level paragraph (<p>).
  */
-export function rehypeInjectAds(options = { interval: 3 }) {
-  const interval = options.interval ?? 3;
+export function rehypeInjectAds(options = { interval: 5 }) {
+  const interval = options.interval ?? 5;
 
   return function transformer(tree) {
     if (!tree || !Array.isArray(tree.children)) return;
-
-    const hasExplicitMarkers = tree.children.some(
-      (node) =>
-        (node.type === 'comment' && node.value?.trim() === 'AD_SLOT') ||
-        (node.type === 'raw' && node.value?.includes('AD_SLOT'))
-    );
 
     let paragraphCount = 0;
     let adIndex = 0;
     const newChildren = [];
 
     for (const node of tree.children) {
-      if (
-        (node.type === 'comment' && node.value?.trim() === 'AD_SLOT') ||
-        (node.type === 'raw' && node.value?.includes('<!-- AD_SLOT -->'))
-      ) {
-        adIndex += 1;
-        newChildren.push(createInContentAdNode(adIndex, paragraphCount));
-        continue;
-      }
-
       newChildren.push(node);
 
       if (node.type === 'element' && node.tagName === 'p') {
         paragraphCount += 1;
 
-        if (!hasExplicitMarkers && paragraphCount % interval === 0) {
+        if (paragraphCount % interval === 0) {
           adIndex += 1;
           newChildren.push(createInContentAdNode(adIndex, paragraphCount));
         }
@@ -54,18 +38,20 @@ function createInContentAdNode(adIndex, afterParagraph) {
     properties: {
       className: [
         'not-prose',
-        'my-8',
+        'my-6',
         'w-full',
+        'rounded-xl',
         'border',
-        'border-stone-400',
-        'bg-[#EFECE4]',
-        'p-3.5',
+        'border-slate-200/80',
+        'bg-slate-50/60',
+        'px-3.5',
+        'py-2.5',
         'ad-slot-wrapper'
       ],
       'data-ad-slot': slotId,
       'data-ad-placement': 'in-content',
       'data-after-paragraph': String(afterParagraph),
-      'aria-label': `Advertisement slot ${adIndex}`
+      'aria-label': `Sponsored slot ${adIndex}`
     },
     children: [
       {
@@ -73,20 +59,15 @@ function createInContentAdNode(adIndex, afterParagraph) {
         tagName: 'div',
         properties: {
           className: [
-            'mb-2',
+            'mb-1.5',
             'flex',
-            'flex-wrap',
             'items-center',
             'justify-between',
-            'border-b',
-            'border-stone-300',
-            'pb-1.5',
             'font-mono',
             'text-[10px]',
-            'font-bold',
             'uppercase',
-            'tracking-widest',
-            'text-stone-600'
+            'tracking-wider',
+            'text-slate-400'
           ]
         },
         children: [
@@ -94,12 +75,13 @@ function createInContentAdNode(adIndex, afterParagraph) {
             type: 'element',
             tagName: 'span',
             properties: {},
-            children: [
-              {
-                type: 'text',
-                value: 'Advertisement'
-              }
-            ]
+            children: [{ type: 'text', value: 'Sponsored' }]
+          },
+          {
+            type: 'element',
+            tagName: 'span',
+            properties: {},
+            children: [{ type: 'text', value: 'Partner Placement' }]
           }
         ]
       },
@@ -111,17 +93,13 @@ function createInContentAdNode(adIndex, afterParagraph) {
             'ad-unit-box',
             'relative',
             'flex',
-            'min-h-[250px]',
+            'min-h-[90px]',
             'w-full',
-            'flex-col',
             'items-center',
             'justify-center',
-            'border',
-            'border-dashed',
-            'border-stone-300',
-            'bg-[#F7F4EE]',
-            'p-6',
-            'text-center'
+            'overflow-hidden',
+            'rounded-lg',
+            'bg-white/80'
           ]
         },
         children: [

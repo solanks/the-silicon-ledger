@@ -1,6 +1,5 @@
 ---
 import SEOHead from '../components/SEOHead.astro';
-import AdSlot from '../components/AdSlot.astro';
 import { TOP_CATEGORY_GROUPS } from '../config/taxonomy';
 import type { Props as SEOProps } from '../components/SEOHead.astro';
 
@@ -8,7 +7,7 @@ export interface Props extends SEOProps {
   showTopLeaderboard?: boolean;
 }
 
-const { showTopLeaderboard = true, ...seoProps } = Astro.props;
+const { showTopLeaderboard = false, ...seoProps } = Astro.props;
 ---
 
 <!doctype html>
@@ -23,9 +22,9 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
     />
   </head>
   <body
-    class="min-h-screen bg-[#F8FAFC] pb-28 font-sans text-slate-900 antialiased selection:bg-rose-600 selection:text-white"
+    class="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 antialiased selection:bg-rose-600 selection:text-white"
   >
-    <!-- Modern Sticky Masthead with Smooth Category Dropdowns & Live Instant Search -->
+    <!-- Modern Sticky Masthead with Smooth Category Dropdowns (Mac, iPad, iPhone, Android, Anker/Ugreen) & Live Search -->
     <header
       class="sticky top-0 z-50 border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur-md"
     >
@@ -79,7 +78,7 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
                     <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-xl ring-1 ring-slate-900/5">
                       <div class="mb-2 border-b border-slate-100 px-2.5 pb-2">
                         <div class="font-mono text-[10px] font-bold uppercase tracking-wider text-rose-600">
-                          {group.label} Department
+                          {group.label}
                         </div>
                         <p class="mt-0.5 text-[11px] leading-snug text-slate-500">
                           {group.description}
@@ -117,7 +116,7 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
           </nav>
         </div>
 
-        <!-- Right Side: Instant Search Trigger / Input -->
+        <!-- Right Side: Instant Search Input -->
         <div class="relative flex items-center gap-3">
           <div class="relative w-48 sm:w-64 md:w-72">
             <svg
@@ -136,7 +135,7 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
             <input
               id="site-search-input"
               type="search"
-              placeholder="Search Anker, Pixel, Earbuds, GPUs… (/)"
+              placeholder="Search Mac, iPhone, iPad, Anker, Pixel… (/)"
               autocomplete="off"
               class="w-full rounded-xl border border-slate-200 bg-slate-50 py-1.5 pl-9 pr-8 text-xs font-medium text-slate-900 placeholder-slate-400 transition focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20"
             />
@@ -163,7 +162,7 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
         </div>
       </div>
 
-      <!-- Mobile Horizontal Category Bar (md:hidden / lg:hidden) -->
+      <!-- Mobile Horizontal Category Bar (md:hidden) -->
       <nav
         class="flex items-center gap-2 overflow-x-auto border-t border-slate-100 bg-slate-50/80 px-4 py-2 text-xs font-semibold text-slate-700 md:hidden"
         aria-label="Mobile Category Navigation"
@@ -187,46 +186,10 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
       </nav>
     </header>
 
-    <!-- Top Leaderboard Ad Slot (CLS-guarded) -->
-    {
-      showTopLeaderboard && (
-        <div class="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
-          <AdSlot
-            slotId="gam-top-billboard-1"
-            placement="leaderboard"
-            label="Top Display Unit"
-          />
-        </div>
-      )
-    }
-
     <!-- Main Page Content -->
     <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <slot />
     </main>
-
-    <!-- Sticky Footer Adhesion Ad Unit (Refreshes every 30s while visible) -->
-    <div
-      id="sticky-footer-ad-bar"
-      class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-2 shadow-lg backdrop-blur-md"
-    >
-      <div class="relative mx-auto max-w-5xl">
-        <button
-          id="dismiss-sticky-footer-ad"
-          type="button"
-          class="absolute -top-7 right-0 rounded-t-lg border border-b-0 border-slate-200 bg-white px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-slate-600 hover:bg-slate-900 hover:text-white"
-          aria-label="Close sticky footer advertisement"
-        >
-          ✕ Dismiss Ad
-        </button>
-        <AdSlot
-          slotId="gam-sticky-footer-adhesion"
-          placement="footer-sticky"
-          label="Sticky Adhesion Unit (30s Refresh)"
-          minHeight="min-h-[58px]"
-        />
-      </div>
-    </div>
 
     <!-- Modern Editorial Footer -->
     <footer class="mt-20 border-t border-slate-200 bg-white py-12 text-xs text-slate-600">
@@ -238,7 +201,7 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
             The Silicon Ledger · Independent Hardware Testing &amp; Buyer Advocacy
           </div>
           <p class="mt-1 text-slate-500">
-            Unsponsored lab telemetry across Laptops, GPUs, Phones, Anker/Ugreen Chargers &amp; Wireless Audio.
+            Unsponsored lab telemetry across Mac, iPad, iPhone, Android/Pixel, GPUs, Anker/Ugreen Chargers &amp; Wireless Audio.
           </p>
         </div>
         <div class="flex flex-wrap gap-5 font-mono text-xs font-semibold uppercase text-slate-700">
@@ -252,7 +215,7 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
       </div>
     </footer>
 
-    <!-- Live Instant Search + Global Ad Viewability & 30-Second Refresh Engine -->
+    <!-- Live Instant Search + Subtle Lazy AdSense Loader -->
     <script>
       interface SearchEntry {
         slug: string;
@@ -319,7 +282,7 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
           statusEl.textContent =
             matches.length > 0
               ? `${matches.length} matching lab report${matches.length === 1 ? '' : 's'}`
-              : `No matches for "${rawQuery}" — try Anker, Pixel, Earbuds, OLED, GPU`;
+              : `No matches for "${rawQuery}" — try Mac, iPad, iPhone, Anker, Pixel`;
 
           listEl.innerHTML = matches
             .slice(0, 6)
@@ -379,49 +342,12 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
         });
       }
 
-      function initAdViewabilityAndRefreshEngine() {
+      function initUnobtrusiveAdLoader() {
         const adWrappers = Array.from(
           document.querySelectorAll<HTMLElement>('.ad-slot-wrapper')
         );
 
-        const dismissFooterBtn = document.getElementById('dismiss-sticky-footer-ad');
-        const stickyFooterBar = document.getElementById('sticky-footer-ad-bar');
-
-        dismissFooterBtn?.addEventListener('click', () => {
-          stickyFooterBar?.remove();
-        });
-
-        const viewableSet = new Set<string>();
-        const dwellSeconds = new Map<HTMLElement, number>();
-        const refreshCountMap = new Map<HTMLElement, number>();
-        const inViewNow = new Set<HTMLElement>();
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              const el = entry.target as HTMLElement;
-              const ratioEl = el.querySelector<HTMLElement>('.ad-ratio-readout');
-              const pctRatio = Math.round(entry.intersectionRatio * 100);
-              if (ratioEl) ratioEl.textContent = `${pctRatio}%`;
-
-              if (entry.intersectionRatio >= 0.5) {
-                inViewNow.add(el);
-              } else {
-                inViewNow.delete(el);
-              }
-            });
-          },
-          {
-            threshold: [0, 0.25, 0.5, 0.75, 1.0]
-          }
-        );
-
-        adWrappers.forEach((el, idx) => {
-          if (!el.dataset.adSlot) el.dataset.adSlot = `slot-${idx + 1}`;
-          dwellSeconds.set(el, 0);
-          refreshCountMap.set(el, 0);
-          observer.observe(el);
-
+        adWrappers.forEach((el) => {
           const ins = el.querySelector('ins.adsbygoogle');
           if (ins && !ins.getAttribute('data-adsbygoogle-status')) {
             try {
@@ -431,54 +357,13 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
             }
           }
         });
-
-        window.setInterval(() => {
-          inViewNow.forEach((el) => {
-            const prev = dwellSeconds.get(el) ?? 0;
-            const next = prev + 0.2;
-            dwellSeconds.set(el, next);
-
-            const timerEl = el.querySelector<HTMLElement>('.ad-dwell-timer');
-            if (timerEl) timerEl.textContent = `${next.toFixed(1)}s`;
-
-            const nextRefreshEl = el.querySelector<HTMLElement>('.ad-next-refresh');
-            const remaining = Math.max(0, 30 - (next % 30));
-            if (nextRefreshEl) nextRefreshEl.textContent = `${remaining.toFixed(1)}s`;
-
-            if (next >= 1.0) {
-              const slotId = el.dataset.adSlot ?? '';
-              if (!viewableSet.has(slotId)) {
-                viewableSet.add(slotId);
-                const badge = el.querySelector<HTMLElement>('.ad-viewability-badge');
-                if (badge) {
-                  badge.textContent = '✓ IAB VIEWABLE (≥1s)';
-                  badge.className =
-                    'ad-viewability-badge rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800';
-                }
-              }
-            }
-
-            const expectedRefreshes = Math.floor(next / 30.0);
-            const currentRefreshes = refreshCountMap.get(el) ?? 0;
-            if (expectedRefreshes > currentRefreshes) {
-              refreshCountMap.set(el, expectedRefreshes);
-
-              const refreshBadge = el.querySelector<HTMLElement>('.ad-refresh-badge');
-              if (refreshBadge) {
-                refreshBadge.textContent = `↻ REFRESHED #${expectedRefreshes}`;
-                refreshBadge.className =
-                  'ad-refresh-badge rounded bg-rose-100 px-2 py-0.5 font-mono text-[10px] font-bold text-rose-700';
-              }
-            }
-          });
-        }, 200);
       }
 
       initLiveSearch();
-      initAdViewabilityAndRefreshEngine();
+      initUnobtrusiveAdLoader();
       document.addEventListener('astro:after-swap', () => {
         initLiveSearch();
-        initAdViewabilityAndRefreshEngine();
+        initUnobtrusiveAdLoader();
       });
     </script>
   </body>
