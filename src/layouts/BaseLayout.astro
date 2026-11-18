@@ -1,6 +1,7 @@
 ---
 import SEOHead from '../components/SEOHead.astro';
 import AdSlot from '../components/AdSlot.astro';
+import { TOP_CATEGORY_GROUPS } from '../config/taxonomy';
 import type { Props as SEOProps } from '../components/SEOHead.astro';
 
 export interface Props extends SEOProps {
@@ -17,89 +18,172 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,400;1,6..72,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
   </head>
   <body
-    class="min-h-screen bg-[#F7F4EE] pb-28 font-sans text-[#141413] antialiased selection:bg-[#D9381E] selection:text-white"
+    class="min-h-screen bg-[#F8FAFC] pb-28 font-sans text-slate-900 antialiased selection:bg-rose-600 selection:text-white"
   >
-    <!-- Editorial Masthead & Live Ad Telemetry Bar -->
-    <header class="sticky top-0 z-50 border-b-2 border-[#141413] bg-[#F7F4EE]/95 backdrop-blur-sm">
+    <!-- Modern Sticky Masthead with Smooth Category Dropdowns & Live Instant Search -->
+    <header
+      class="sticky top-0 z-50 border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur-md"
+    >
       <div
-        class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:px-6 lg:px-8"
+        class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8"
       >
+        <!-- Brand Logo -->
         <div class="flex items-center gap-6">
           <a
             href="/"
-            class="flex items-baseline gap-2 font-serif text-2xl font-extrabold tracking-tight text-[#141413]"
+            class="flex items-center gap-2.5 font-serif text-2xl font-extrabold tracking-tight text-slate-900"
           >
             <span
-              class="bg-[#141413] px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-widest text-[#F7F4EE]"
+              class="rounded-lg bg-rose-600 px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-widest text-white shadow-sm"
             >
-              LAB
+              SL
             </span>
-            <span>The Silicon<span class="text-[#D9381E]">Ledger</span></span>
+            <span>The Silicon<span class="text-rose-600">Ledger</span></span>
           </a>
 
+          <!-- Desktop Organized Category Navigation with Smooth Dropdowns -->
           <nav
-            class="hidden items-center gap-5 border-l border-stone-300 pl-6 font-mono text-xs font-semibold uppercase tracking-wider text-stone-700 md:flex"
+            class="hidden items-center gap-1 lg:flex"
+            aria-label="Primary Categories"
           >
-            <a href="/" class="transition hover:text-[#D9381E]">Dispatches</a>
+            {
+              TOP_CATEGORY_GROUPS.map((group) => (
+                <div class="group relative">
+                  <a
+                    href={`/category/${group.slug}`}
+                    class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold tracking-wide text-slate-700 transition-colors duration-150 hover:bg-slate-100 hover:text-rose-600"
+                  >
+                    <span>{group.label}</span>
+                    <svg
+                      class="h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:rotate-180 group-hover:text-rose-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </a>
+
+                  <!-- Smooth Animated Flyout Dropdown -->
+                  <div class="invisible absolute left-0 top-full z-50 w-72 translate-y-2 pt-2 opacity-0 transition-all duration-200 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-xl ring-1 ring-slate-900/5">
+                      <div class="mb-2 border-b border-slate-100 px-2.5 pb-2">
+                        <div class="font-mono text-[10px] font-bold uppercase tracking-wider text-rose-600">
+                          {group.label} Department
+                        </div>
+                        <p class="mt-0.5 text-[11px] leading-snug text-slate-500">
+                          {group.description}
+                        </p>
+                      </div>
+                      <ul class="space-y-1">
+                        {group.subItems.map((sub) => (
+                          <li>
+                            <a
+                              href={sub.href}
+                              class="flex items-center justify-between rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-rose-50 hover:text-rose-600"
+                            >
+                              <span>{sub.label}</span>
+                              {sub.badge && (
+                                <span class="rounded-full bg-rose-100 px-2 py-0.5 font-mono text-[10px] font-bold text-rose-700">
+                                  {sub.badge}
+                                </span>
+                              )}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+
             <a
-              href="/articles/skip-the-base-m5-macbook-pro-trap"
-              class="text-[#D9381E] underline decoration-2 underline-offset-4"
+              href="/tags"
+              class="rounded-lg px-3 py-2 font-mono text-xs font-bold text-slate-600 transition-colors hover:bg-slate-100 hover:text-rose-600"
             >
-              M5 Teardown Trap
-            </a>
-            <a
-              href="/articles/snapdragon-8-elite-vs-a18-pro-review"
-              class="transition hover:text-[#D9381E]"
-            >
-              SoC Bench
-            </a>
-            <a
-              href="/articles/rtx-5090-laptop-gpu-benchmarks"
-              class="transition hover:text-[#D9381E]"
-            >
-              GPUs
-            </a>
-            <a href="/rss.xml" class="transition hover:text-[#D9381E]">
-              RSS
+              #Tags
             </a>
           </nav>
         </div>
 
-        <!-- Editorial Desk Tag -->
-        <div
-          class="hidden items-center gap-2 border border-stone-900 bg-[#EFECE4] px-3 py-1 font-mono text-[11px] font-semibold text-stone-800 sm:flex"
-        >
-          <span class="h-2 w-2 rounded-full bg-[#D9381E]"></span>
-          <a href="/about" class="hover:text-[#D9381E]">
-            Independent Hardware Lab · Zero Sponsored Scores
-          </a>
+        <!-- Right Side: Instant Search Trigger / Input -->
+        <div class="relative flex items-center gap-3">
+          <div class="relative w-48 sm:w-64 md:w-72">
+            <svg
+              class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.15 6.15z"
+              />
+            </svg>
+            <input
+              id="site-search-input"
+              type="search"
+              placeholder="Search Anker, Pixel, Earbuds, GPUs… (/)"
+              autocomplete="off"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 py-1.5 pl-9 pr-8 text-xs font-medium text-slate-900 placeholder-slate-400 transition focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+            />
+            <kbd
+              class="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-slate-200 bg-white px-1.5 py-0.5 font-mono text-[10px] text-slate-400 sm:inline-block"
+            >
+              /
+            </kbd>
+
+            <!-- Instant Live Search Results Dropdown -->
+            <div
+              id="site-search-results"
+              class="hidden absolute right-0 top-full z-50 mt-2 max-h-[70vh] w-[90vw] max-w-md overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5"
+            >
+              <div
+                id="site-search-status"
+                class="mb-2 px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400"
+              >
+                Type to search articles &amp; tags…
+              </div>
+              <div id="site-search-list" class="space-y-2"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Mobile Navigation Strip -->
+      <!-- Mobile Horizontal Category Bar (md:hidden / lg:hidden) -->
       <nav
-        aria-label="Mobile navigation"
-        class="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-stone-300 bg-[#EFECE4] px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-stone-700 md:hidden"
+        class="flex items-center gap-2 overflow-x-auto border-t border-slate-100 bg-slate-50/80 px-4 py-2 text-xs font-semibold text-slate-700 md:hidden"
+        aria-label="Mobile Category Navigation"
       >
-        <a href="/" class="transition hover:text-[#D9381E]">Dispatches</a>
+        {
+          TOP_CATEGORY_GROUPS.map((group) => (
+            <a
+              href={`/category/${group.slug}`}
+              class="shrink-0 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-700 shadow-sm hover:border-rose-500 hover:text-rose-600"
+            >
+              {group.label}
+            </a>
+          ))
+        }
         <a
-          href="/articles/skip-the-base-m5-macbook-pro-trap"
-          class="text-[#D9381E] underline decoration-2 underline-offset-4"
+          href="/tags"
+          class="shrink-0 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 font-mono text-[11px] font-bold text-rose-700"
         >
-          M5 Trap
+          #All Tags
         </a>
-        <a href="/articles/snapdragon-8-elite-vs-a18-pro-review" class="transition hover:text-[#D9381E]">
-          SoC Bench
-        </a>
-        <a href="/articles/rtx-5090-laptop-gpu-benchmarks" class="transition hover:text-[#D9381E]">
-          GPUs
-        </a>
-        <a href="/about" class="transition hover:text-[#D9381E]">Methodology</a>
       </nav>
     </header>
 
@@ -110,7 +194,7 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
           <AdSlot
             slotId="gam-top-billboard-1"
             placement="leaderboard"
-            label="Top Broadsheet Billboard"
+            label="Top Display Unit"
           />
         </div>
       )
@@ -124,13 +208,13 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
     <!-- Sticky Footer Adhesion Ad Unit (Refreshes every 30s while visible) -->
     <div
       id="sticky-footer-ad-bar"
-      class="fixed inset-x-0 bottom-0 z-40 border-t-2 border-[#141413] bg-[#EFECE4]/95 px-4 py-2 shadow-lg backdrop-blur-sm"
+      class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-2 shadow-lg backdrop-blur-md"
     >
       <div class="relative mx-auto max-w-5xl">
         <button
           id="dismiss-sticky-footer-ad"
           type="button"
-          class="absolute -top-7 right-0 border border-b-0 border-[#141413] bg-[#EFECE4] px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-stone-800 hover:bg-[#141413] hover:text-white"
+          class="absolute -top-7 right-0 rounded-t-lg border border-b-0 border-slate-200 bg-white px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-slate-600 hover:bg-slate-900 hover:text-white"
           aria-label="Close sticky footer advertisement"
         >
           ✕ Dismiss Ad
@@ -144,41 +228,162 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
       </div>
     </div>
 
-    <!-- Editorial Colophon Footer -->
-    <footer class="mt-20 border-t-2 border-[#141413] bg-[#EFECE4] py-10 text-xs text-stone-700">
+    <!-- Modern Editorial Footer -->
+    <footer class="mt-20 border-t border-slate-200 bg-white py-12 text-xs text-slate-600">
       <div
         class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:flex-row sm:items-center sm:px-6 lg:px-8"
       >
         <div>
-          <div class="font-serif text-base font-bold text-[#141413]">
+          <div class="font-serif text-lg font-extrabold text-slate-900">
             The Silicon Ledger · Independent Hardware Testing &amp; Buyer Advocacy
           </div>
-          <p class="mt-1 text-stone-600">
-            Typeset in Newsreader, Public Sans &amp; IBM Plex Mono. Zero sponsored review scores.
+          <p class="mt-1 text-slate-500">
+            Unsponsored lab telemetry across Laptops, GPUs, Phones, Anker/Ugreen Chargers &amp; Wireless Audio.
           </p>
         </div>
-        <div class="flex flex-wrap gap-5 font-mono text-xs font-semibold uppercase">
-          <a href="/" class="hover:text-[#D9381E]">Front Page</a>
-          <a href="/about" class="hover:text-[#D9381E]">Methodology</a>
-          <a href="/privacy" class="hover:text-[#D9381E]">Privacy &amp; Ads</a>
-          <a href="/contact" class="hover:text-[#D9381E]">Contact</a>
-          <a href="/rss.xml" class="hover:text-[#D9381E]">RSS</a>
-          <a href="/news-sitemap.xml" class="hover:text-[#D9381E]">News XML</a>
-          <a href="/ads.txt" class="hover:text-[#D9381E]">ads.txt</a>
+        <div class="flex flex-wrap gap-5 font-mono text-xs font-semibold uppercase text-slate-700">
+          <a href="/" class="hover:text-rose-600">Home</a>
+          <a href="/tags" class="hover:text-rose-600">Tags &amp; Topics</a>
+          <a href="/about" class="hover:text-rose-600">Methodology</a>
+          <a href="/privacy" class="hover:text-rose-600">Privacy &amp; Ads</a>
+          <a href="/contact" class="hover:text-rose-600">Contact</a>
+          <a href="/rss.xml" class="hover:text-rose-600">RSS</a>
         </div>
       </div>
     </footer>
 
-    <!-- Global IAB Active View (50% pixels >= 1s) + 30-Second Viewable Ad Auto-Refresh Engine -->
+    <!-- Live Instant Search + Global Ad Viewability & 30-Second Refresh Engine -->
     <script>
+      interface SearchEntry {
+        slug: string;
+        url: string;
+        title: string;
+        subtitle: string;
+        description: string;
+        category: string;
+        tags: string[];
+        tagSlugs: string[];
+        score: number;
+        price: string;
+        heroImage: string;
+      }
+
+      let cachedIndex: SearchEntry[] | null = null;
+
+      async function loadSearchIndex(): Promise<SearchEntry[]> {
+        if (cachedIndex) return cachedIndex;
+        try {
+          const res = await fetch('/search-index.json');
+          if (res.ok) {
+            cachedIndex = await res.json();
+            return cachedIndex ?? [];
+          }
+        } catch {
+          // Ignore network error
+        }
+        return [];
+      }
+
+      function initLiveSearch() {
+        const input = document.getElementById('site-search-input') as HTMLInputElement | null;
+        const dropdown = document.getElementById('site-search-results');
+        const statusEl = document.getElementById('site-search-status');
+        const listEl = document.getElementById('site-search-list');
+
+        if (!input || !dropdown || !statusEl || !listEl) return;
+
+        const renderMatches = async (rawQuery: string) => {
+          const q = rawQuery.trim().toLowerCase();
+          if (!q) {
+            dropdown.classList.add('hidden');
+            return;
+          }
+
+          dropdown.classList.remove('hidden');
+          const entries = await loadSearchIndex();
+          const terms = q.split(/\s+/);
+
+          const matches = entries.filter((item) => {
+            const haystack = [
+              item.title,
+              item.subtitle,
+              item.description,
+              item.category,
+              ...item.tags
+            ]
+              .join(' ')
+              .toLowerCase();
+            return terms.every((t) => haystack.includes(t));
+          });
+
+          statusEl.textContent =
+            matches.length > 0
+              ? `${matches.length} matching lab report${matches.length === 1 ? '' : 's'}`
+              : `No matches for "${rawQuery}" — try Anker, Pixel, Earbuds, OLED, GPU`;
+
+          listEl.innerHTML = matches
+            .slice(0, 6)
+            .map(
+              (m) => `
+              <a href="${m.url}" class="flex items-start gap-3 rounded-xl border border-slate-100 p-2.5 transition hover:border-rose-200 hover:bg-rose-50/50">
+                <img src="${m.heroImage}" alt="" class="h-14 w-20 shrink-0 rounded-lg object-cover bg-slate-900" />
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2 font-mono text-[10px] font-bold uppercase text-rose-600">
+                    <span>${m.category}</span>
+                    <span class="rounded bg-slate-900 px-1.5 py-0.2 text-white">${m.score.toFixed(1)}/10</span>
+                  </div>
+                  <div class="mt-0.5 line-clamp-2 text-xs font-bold leading-snug text-slate-900">${m.title}</div>
+                  <div class="mt-1 flex flex-wrap gap-1">
+                    ${m.tags
+                      .slice(0, 3)
+                      .map(
+                        (t) =>
+                          `<span class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[9px] text-slate-600">#${t}</span>`
+                      )
+                      .join('')}
+                  </div>
+                </div>
+              </a>
+            `
+            )
+            .join('');
+        };
+
+        input.addEventListener('focus', () => {
+          loadSearchIndex();
+          if (input.value.trim()) renderMatches(input.value);
+        });
+
+        input.addEventListener('input', () => {
+          renderMatches(input.value);
+        });
+
+        document.addEventListener('click', (e) => {
+          const target = e.target as Node;
+          if (!input.contains(target) && !dropdown.contains(target)) {
+            dropdown.classList.add('hidden');
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === '/' && document.activeElement !== input) {
+            const tag = (document.activeElement as HTMLElement)?.tagName;
+            if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
+              e.preventDefault();
+              input.focus();
+            }
+          } else if (e.key === 'Escape') {
+            dropdown.classList.add('hidden');
+            input.blur();
+          }
+        });
+      }
+
       function initAdViewabilityAndRefreshEngine() {
         const adWrappers = Array.from(
           document.querySelectorAll<HTMLElement>('.ad-slot-wrapper')
         );
 
-        const totalEl = document.getElementById('hud-total-ads');
-        const viewableEl = document.getElementById('hud-viewable-ads');
-        const refreshHudEl = document.getElementById('hud-refresh-count');
         const dismissFooterBtn = document.getElementById('dismiss-sticky-footer-ad');
         const stickyFooterBar = document.getElementById('sticky-footer-ad-bar');
 
@@ -186,23 +391,10 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
           stickyFooterBar?.remove();
         });
 
-        if (totalEl) totalEl.textContent = String(adWrappers.length);
-
         const viewableSet = new Set<string>();
         const dwellSeconds = new Map<HTMLElement, number>();
         const refreshCountMap = new Map<HTMLElement, number>();
         const inViewNow = new Set<HTMLElement>();
-        let totalRefreshes = 0;
-
-        const updateHud = () => {
-          if (viewableEl && adWrappers.length > 0) {
-            const pct = Math.round((viewableSet.size / adWrappers.length) * 100);
-            viewableEl.textContent = `${pct}% (${viewableSet.size}/${adWrappers.length})`;
-          }
-          if (refreshHudEl) {
-            refreshHudEl.textContent = String(totalRefreshes);
-          }
-        };
 
         const observer = new IntersectionObserver(
           (entries) => {
@@ -230,7 +422,6 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
           refreshCountMap.set(el, 0);
           observer.observe(el);
 
-          // Initialize Google AdSense unit inside slot
           const ins = el.querySelector('ins.adsbygoogle');
           if (ins && !ins.getAttribute('data-adsbygoogle-status')) {
             try {
@@ -262,9 +453,8 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
                 if (badge) {
                   badge.textContent = '✓ IAB VIEWABLE (≥1s)';
                   badge.className =
-                    'ad-viewability-badge border border-emerald-800 bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-900';
+                    'ad-viewability-badge rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800';
                 }
-                updateHud();
               }
             }
 
@@ -272,31 +462,24 @@ const { showTopLeaderboard = true, ...seoProps } = Astro.props;
             const currentRefreshes = refreshCountMap.get(el) ?? 0;
             if (expectedRefreshes > currentRefreshes) {
               refreshCountMap.set(el, expectedRefreshes);
-              totalRefreshes += 1;
 
               const refreshBadge = el.querySelector<HTMLElement>('.ad-refresh-badge');
               if (refreshBadge) {
                 refreshBadge.textContent = `↻ REFRESHED #${expectedRefreshes}`;
                 refreshBadge.className =
-                  'ad-refresh-badge border border-[#D9381E] bg-[#FDECE9] px-2 py-0.5 font-mono text-[10px] font-bold text-[#B02A14]';
+                  'ad-refresh-badge rounded bg-rose-100 px-2 py-0.5 font-mono text-[10px] font-bold text-rose-700';
               }
-
-              const unitBox = el.querySelector<HTMLElement>('.ad-unit-box');
-              unitBox?.classList.add('ring-2', 'ring-[#D9381E]');
-              window.setTimeout(() => {
-                unitBox?.classList.remove('ring-2', 'ring-[#D9381E]');
-              }, 800);
-
-              updateHud();
             }
           });
         }, 200);
-
-        updateHud();
       }
 
+      initLiveSearch();
       initAdViewabilityAndRefreshEngine();
-      document.addEventListener('astro:after-swap', initAdViewabilityAndRefreshEngine);
+      document.addEventListener('astro:after-swap', () => {
+        initLiveSearch();
+        initAdViewabilityAndRefreshEngine();
+      });
     </script>
   </body>
 </html>

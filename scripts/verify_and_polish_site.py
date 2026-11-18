@@ -20,10 +20,14 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass, field
+import math
 import os
 from pathlib import Path
 import re
+import struct
+import subprocess
 import sys
+import tempfile
 
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 ARTICLES_DIR = WORKSPACE_ROOT / "src" / "content" / "articles"
@@ -107,7 +111,12 @@ def audit_articles(report: AuditReport) -> None:
             elif url.startswith("/images/") and not check_local_asset(url):
                 report.add_error(f"{path.name}: Broken local image link ({url}).")
 
-        # 5. Basic formatting checks
+        # 5. Basic formatting & title length checks
+        title_match = re.search(r'^title:\s*["\']([^"\']+)["\']', frontmatter, re.MULTILINE)
+        if title_match and len(title_match.group(1)) > 75:
+            report.add_warning(
+                f"{path.name}: Title is {len(title_match.group(1))} chars (keep <= 75 chars for scannability)."
+            )
         if not body.strip():
             report.add_error(f"{path.name}: Article body is empty.")
         if body.count("```") % 2 != 0:
@@ -144,6 +153,103 @@ def audit_site_files(report: AuditReport) -> None:
         base_text = base_layout.read_text(encoding="utf-8")
         if "md:hidden" not in base_text:
             report.add_warning("src/layouts/BaseLayout.astro: Navigation appears hidden on mobile (no md:hidden nav).")
+
+
+def _image_fingerprint(image_path: Path) -> tuple[float, float, float, float, int]:
+    """Compute (mean_r, mean_g, mean_b, luminance, dhash64) via macOS sips."""
+    with tempfile.NamedTemporaryFile(suffix=".bmp", delete=False) as tmp:
+        tmp_path = tmp.name
+    try:
+        subprocess.run(
+            ["sips", "-z", "16", "16", "-s", "format", "bmp", str(image_path), "--out", tmp_path],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True,
+        )
+        data = Path(tmp_path).read_bytes()
+        offset = struct.unpack_from("<I", data, 10)[0]
+        bpp = struct.unpack_from("<H", data, 28)[0]
+        step = bpp // 8
+        pixels = data[offset:]
+
+        rs, gs, bs, lums = [], [], [], []
+        for i in range(0, min(len(pixels), 256 * step), step):
+            b, g, r = pixels[i], pixels[i + 1], pixels[i + 2]
+            rs.append(r)
+            gs.append(g)
+            bs.append(b)
+            lums.append(0.299 * r + 0.587 * g + 0.114 * b)
+
+        # 64-bit dHash on top-left 8x8 downsampled block (step 2)
+        dhash = 0
+        bit = 0
+        for row in range(8):
+            for col in range(8):
+                idx = (row * 2) * 16 + (col * 2)
+                nxt = (row * 2) * 16 + ((col * 2 + 1) % 16)
+                if idx < len(lums) and nxt < len(lums) and lums[idx] > lums[nxt]:
+                    dhash |= 1 << bit
+                bit += 1
+
+        n = max(1, len(rs))
+        return sum(rs) / n, sum(gs) / n, sum(bs) / n, sum(lums) / n, dhash
+    finally:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+
+
+def run_image_diversity_check() -> int:
+    """Evaluate all published article hero images against each other for visual similarity."""
+    article_files = sorted(ARTICLES_DIR.glob("*.mdx"))
+    fingerprints: list[tuple[str, str, tuple[float, float, float, float, int]]] = []
+
+    for path in article_files:
+        text = path.read_text(encoding="utf-8")
+        src_match = re.search(r'heroImage:\s*\n(?:\s+.*\n)*?\s+src:\s*["\']([^"\']+)["\']', text)
+        if not src_match:
+            continue
+        rel = src_match.group(1).lstrip("/")
+        img_path = PUBLIC_DIR / rel
+        if img_path.is_file():
+            fingerprints.append((path.name, src_match.group(1), _image_fingerprint(img_path)))
+
+    print(f"=== Image Diversity & Similarity Test ({len(fingerprints)} article images) ===")
+    failures: list[str] = []
+
+    dark_count = sum(1 for _, _, fp in fingerprints if fp[3] < 65.0)
+    if fingerprints and dark_count / len(fingerprints) > 0.5:
+        failures.append(
+            f"{dark_count}/{len(fingerprints)} images are dark/low-key (lum < 65); rotate through bright daylight, clean studio, and documentary styles."
+        )
+
+    for i in range(len(fingerprints)):
+        name_a, src_a, fp_a = fingerprints[i]
+        for j in range(i + 1, len(fingerprints)):
+            name_b, src_b, fp_b = fingerprints[j]
+            rgb_dist = math.sqrt((fp_a[0] - fp_b[0]) ** 2 + (fp_a[1] - fp_b[1]) ** 2 + (fp_a[2] - fp_b[2]) ** 2)
+            lum_diff = abs(fp_a[3] - fp_b[3])
+            hamming = bin(fp_a[4] ^ fp_b[4]).count("1")
+
+            if rgb_dist < 18.0 and lum_diff < 12.0:
+                failures.append(
+                    f"Visual similarity too high (RGB dist={rgb_dist:.1f}, Lum diff={lum_diff:.1f}): {name_a} ({src_a}) vs {name_b} ({src_b}). Redo one with a different style/overlay."
+                )
+            elif hamming <= 6:
+                failures.append(
+                    f"Structural layout too similar (dHash dist={hamming}): {name_a} vs {name_b}. Redo one with a different composition."
+                )
+
+    for name, src, fp in fingerprints:
+        print(f"  - {name:50s} Lum={fp[3]:5.1f} RGB=({fp[0]:5.1f},{fp[1]:5.1f},{fp[2]:5.1f})")
+
+    if failures:
+        print(f"\nFailed ({len(failures)}):")
+        for f in failures:
+            print(f"  [FAIL] {f}")
+        return 1
+
+    print("\n[PASS] All article hero images are visually distinct and well-balanced.")
+    return 0
 
 
 def run_audit() -> int:
@@ -200,6 +306,8 @@ async def run_antigravity_verifier() -> None:
 
 
 if __name__ == "__main__":
+    if "--check-image-diversity" in sys.argv:
+        sys.exit(run_image_diversity_check())
     if "--audit" in sys.argv:
         sys.exit(run_audit())
     asyncio.run(run_antigravity_verifier())

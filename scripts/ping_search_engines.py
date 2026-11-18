@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 Instant Search Engine & IndexNow Submitter for The Silicon Ledger.
-Pushes all live article URLs directly to IndexNow (Bing, DuckDuckGo, Yandex, Naver)
-and verifies `/sitemap.xml`, `/news-sitemap.xml`, and `/rss.xml`.
+Pushes all live article, category, and tag URLs directly to IndexNow.
 """
 
 import json
@@ -14,9 +13,18 @@ INDEXNOW_KEY = "thesiliconledgerindexnowkey2026"
 
 URLS_TO_INDEX = [
     f"{SITE_URL}/",
+    f"{SITE_URL}/tags/",
     f"{SITE_URL}/about/",
     f"{SITE_URL}/privacy/",
     f"{SITE_URL}/contact/",
+    f"{SITE_URL}/category/laptops-pc/",
+    f"{SITE_URL}/category/phones-mobile/",
+    f"{SITE_URL}/category/chargers-power/",
+    f"{SITE_URL}/category/audio-earbuds/",
+    f"{SITE_URL}/category/tech-investigations/",
+    f"{SITE_URL}/articles/anker-vs-ugreen-gan-charger-throttling-test/",
+    f"{SITE_URL}/articles/flagship-anc-earbuds-battery-degradation-test/",
+    f"{SITE_URL}/articles/google-pixel-tensor-modem-battery-drain-test/",
     f"{SITE_URL}/articles/8gb-vram-gpu-obsolescence-trap-2026/",
     f"{SITE_URL}/articles/oled-monitor-vrr-flicker-burn-in-warranty-trap/",
     f"{SITE_URL}/articles/cloud-outage-monoculture-single-point-of-failure/",

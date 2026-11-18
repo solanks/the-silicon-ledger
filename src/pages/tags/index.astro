@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { TOP_CATEGORY_GROUPS, slugifyTag } from '../../config/taxonomy';
+
+const allArticles = await getCollection('articles');
+
+const tagCounts = new Map<string, { label: string; slug: string; count: number }>();
+
+for (const article of allArticles) {
+  for (const tag of article.data.tags) {
+    const slug = slugifyTag(tag);
+    const existing = tagCounts.get(slug);
+    if (existing) {
+      existing.count += 1;
+    } else {
+      tagCounts.set(slug, { label: tag, slug, count: 1 });
+    }
+  }
+}
+
+const sortedTags = Array.from(tagCounts.values()).sort(
+  (a, b) => b.count - a.count || a.label.localeCompare(b.label)
+);
+---
+
+<BaseLayout
+  title="All Hardware Tags, Categories & Topic Directory"
+  description="Browse all hardware categories, brand tags (Anker, Ugreen, Google Pixel, Apple Silicon, RTX GPUs, Earbuds), and investigative topics on The Silicon Ledger."
+>
+  <section class="mx-auto max-w-5xl space-y-10">
+    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+      <div class="mb-2 font-mono text-xs font-bold uppercase tracking-widest text-rose-600">
+        Site Directory &amp; Taxonomy
+      </div>
+      <h1 class="font-serif text-3xl font-extrabold text-slate-900 sm:text-4xl">
+        Browse by Category or Topic Tag
+      </h1>
+      <p class="mt-2 text-sm text-slate-600">
+        Select a primary hardware department below or click any specific brand/technology tag to filter all lab reviews.
+      </p>
+
+      <!-- 5 Primary Categories Grid -->
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          TOP_CATEGORY_GROUPS.map((group) => (
+            <a
+              href={`/category/${group.slug}`}
+              class="group rounded-xl border border-slate-200 bg-slate-50/70 p-4 transition hover:border-rose-500 hover:bg-white hover:shadow-md"
+            >
+              <div class="flex items-center justify-between">
+                <h2 class="font-serif text-lg font-bold text-slate-900 group-hover:text-rose-600">
+                  {group.label}
+                </h2>
+                <span class="font-mono text-xs text-rose-600">→</span>
+              </div>
+              <p class="mt-1 text-xs leading-relaxed text-slate-600">
+                {group.description}
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- All Tags Cloud -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+      <h2 class="font-serif text-2xl font-bold text-slate-900">
+        All Topic &amp; Brand Tags ({sortedTags.length})
+      </h2>
+      <div class="mt-5 flex flex-wrap gap-2.5">
+        {
+          sortedTags.map((t) => (
+            <a
+              href={`/tags/${t.slug}`}
+              class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 font-mono text-xs font-semibold text-slate-800 transition hover:border-rose-500 hover:bg-rose-50 hover:text-rose-700"
+            >
+              <span>#{t.label}</span>
+              <span class="rounded-full bg-slate-200/80 px-2 py-0.5 text-[10px] text-slate-600">
+                {t.count}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

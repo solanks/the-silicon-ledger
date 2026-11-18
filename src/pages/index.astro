@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
 import SpecComparisonTable from '../components/SpecComparisonTable.astro';
+import { TOP_CATEGORY_GROUPS, slugifyTag } from '../config/taxonomy';
 
 const allArticles = (await getCollection('articles')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -11,68 +12,138 @@ const allArticles = (await getCollection('articles')).sort(
 const featuredArticle =
   allArticles.find((a) => a.data.featured) ?? allArticles[0];
 
-const gridArticles = allArticles.filter((a) => a.slug !== featuredArticle?.slug);
+// Collect top tags for quick discovery
+const tagFreq = new Map<string, number>();
+for (const a of allArticles) {
+  for (const t of a.data.tags) {
+    tagFreq.set(t, (tagFreq.get(t) ?? 0) + 1);
+  }
+}
+const popularTags = Array.from(tagFreq.entries())
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 14)
+  .map(([label]) => label);
 ---
 
 <BaseLayout
-  title="Independent Silicon Teardowns, Benchmarks & Buyer Advocacy"
-  description="The Silicon Ledger delivers independent hardware teardowns, lab benchmark delta matrices, and no-spin buyer guidance."
+  title="Independent Silicon Teardowns, Charger & Audio Lab Tests, and Buyer Advocacy"
+  description="The Silicon Ledger delivers independent hardware teardowns, Anker vs. Ugreen GaN charger load tests, Pixel & Android battery telemetry, and no-spin buyer guidance."
 >
-  <!-- Lead Broadsheet Teardown Story -->
+  <!-- Organized Department & Popular Tag Explorer Bar -->
+  <section class="mb-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      {
+        TOP_CATEGORY_GROUPS.map((group) => (
+          <a
+            href={`/category/${group.slug}`}
+            class="group flex flex-col justify-between rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5 transition-all duration-150 hover:-translate-y-0.5 hover:border-rose-500 hover:bg-white hover:shadow-md"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-serif text-base font-extrabold text-slate-900 group-hover:text-rose-600">
+                {group.label}
+              </span>
+              <span class="font-mono text-xs font-bold text-rose-600">→</span>
+            </div>
+            <p class="mt-1 line-clamp-2 text-[11px] leading-snug text-slate-500">
+              {group.description}
+            </p>
+          </a>
+        ))
+      }
+    </div>
+
+    <!-- Clickable Popular Tags Strip -->
+    <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3.5">
+      <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        Trending Tags:
+      </span>
+      {
+        popularTags.map((tag) => (
+          <a
+            href={`/tags/${slugifyTag(tag)}`}
+            class="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 font-mono text-[11px] font-semibold text-slate-700 transition hover:border-rose-500 hover:bg-rose-50 hover:text-rose-600"
+          >
+            #{tag}
+          </a>
+        ))
+      }
+      <a
+        href="/tags"
+        class="ml-auto font-mono text-[11px] font-bold text-rose-600 hover:underline"
+      >
+        View All Tags →
+      </a>
+    </div>
+  </section>
+
+  <!-- Lead Investigation Story -->
   {
     featuredArticle && (
       <section class="mb-12">
-        <div class="border-2 border-[#141413] bg-[#FCFBF8] shadow-[8px_8px_0px_#141413]">
+        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md">
           <div class="grid grid-cols-1 lg:grid-cols-12">
-            <div class="relative aspect-video overflow-hidden border-b-2 border-[#141413] bg-stone-900 lg:col-span-7 lg:aspect-auto lg:border-b-0 lg:border-r-2">
-              <img
-                src={featuredArticle.data.heroImage.src}
-                alt={featuredArticle.data.heroImage.alt}
-                width={featuredArticle.data.heroImage.width}
-                height={featuredArticle.data.heroImage.height}
-                fetchpriority="high"
-                class="h-full w-full object-cover"
-              />
+            <div class="relative aspect-video overflow-hidden bg-slate-900 lg:col-span-7 lg:aspect-auto">
+              <a href={`/articles/${featuredArticle.slug}`} class="block h-full w-full">
+                <img
+                  src={featuredArticle.data.heroImage.src}
+                  alt={featuredArticle.data.heroImage.alt}
+                  width={featuredArticle.data.heroImage.width}
+                  height={featuredArticle.data.heroImage.height}
+                  fetchpriority="high"
+                  class="h-full w-full object-cover transition duration-300 hover:scale-[1.02]"
+                />
+              </a>
               <div class="absolute left-4 top-4 flex items-center gap-2 font-mono text-xs font-bold uppercase">
-                <span class="border border-[#141413] bg-[#D9381E] px-3 py-1 text-white">
-                  Lead Investigation
+                <span class="rounded-lg bg-rose-600 px-3 py-1 text-white shadow">
+                  Lead Lab Report
                 </span>
-                <span class="border border-[#141413] bg-[#FCFBF8] px-3 py-1 text-[#141413]">
-                  Lab Score: {featuredArticle.data.verdict.score.toFixed(1)} / 10
+                <span class="rounded-lg bg-slate-900/90 px-3 py-1 text-white shadow backdrop-blur-sm">
+                  Score: {featuredArticle.data.verdict.score.toFixed(1)} / 10
                 </span>
               </div>
             </div>
 
             <div class="flex flex-col justify-between p-6 sm:p-8 lg:col-span-5">
               <div>
-                <div class="mb-3 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#D9381E]">
+                <div class="mb-3 flex flex-wrap items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-rose-600">
                   <span>{featuredArticle.data.category}</span>
-                  <span>·</span>
-                  <span>{featuredArticle.data.readingTimeMinutes} min read</span>
+                  <span class="text-slate-300">·</span>
+                  <span class="text-slate-500">{featuredArticle.data.readingTimeMinutes} min read</span>
                 </div>
 
-                <h1 class="font-serif text-3xl font-extrabold leading-[1.12] text-[#141413] sm:text-4xl">
+                <h1 class="font-serif text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl lg:text-4xl">
                   <a
                     href={`/articles/${featuredArticle.slug}`}
-                    class="hover:text-[#D9381E]"
+                    class="transition-colors hover:text-rose-600"
                   >
                     {featuredArticle.data.title}
                   </a>
                 </h1>
 
-                <p class="mt-4 text-sm leading-relaxed text-stone-700">
+                <p class="mt-4 text-sm leading-relaxed text-slate-600">
                   {featuredArticle.data.verdict.summary}
                 </p>
+
+                <div class="mt-4 flex flex-wrap gap-1.5">
+                  {featuredArticle.data.tags.map((tag) => (
+                    <a
+                      href={`/tags/${slugifyTag(tag)}`}
+                      class="rounded-md bg-slate-100 px-2.5 py-1 font-mono text-[11px] font-medium text-slate-700 transition hover:bg-rose-100 hover:text-rose-700"
+                    >
+                      #{tag}
+                    </a>
+                  ))}
+                </div>
               </div>
 
-              <div class="mt-6 border-t-2 border-[#141413] pt-4">
+              <div class="mt-6 border-t border-slate-100 pt-4">
                 <div class="flex items-center justify-between gap-4">
-                  <div class="font-mono text-xs text-stone-600">
-                    By <strong class="text-[#141413]">{featuredArticle.data.author.name}</strong>
+                  <div class="font-mono text-xs text-slate-500">
+                    By <strong class="text-slate-900">{featuredArticle.data.author.name}</strong>
                   </div>
                   <a
                     href={`/articles/${featuredArticle.slug}`}
-                    class="inline-flex items-center gap-2 border-2 border-[#141413] bg-[#141413] px-4 py-2 font-mono text-xs font-bold uppercase text-[#F7F4EE] transition hover:bg-[#D9381E]"
+                    class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 font-mono text-xs font-bold uppercase text-white shadow-sm transition hover:bg-rose-600"
                   >
                     <span>Read Full Teardown →</span>
                   </a>
@@ -88,23 +159,23 @@ const gridArticles = allArticles.filter((a) => a.slug !== featuredArticle?.slug)
   <!-- Main Dispatch Feed + Sticky Sidebar Ad Slot -->
   <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
     <div class="space-y-8 lg:col-span-8">
-      <div class="flex items-center justify-between border-b-2 border-[#141413] pb-2">
-        <h2 class="font-serif text-2xl font-extrabold text-[#141413]">
-          Latest Lab Dispatches &amp; Teardowns
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+        <h2 class="font-serif text-2xl font-extrabold text-slate-900">
+          Latest Lab Dispatches &amp; Buyer Warnings
         </h2>
-        <span class="font-mono text-xs font-semibold text-stone-600">
-          {allArticles.length} Filed Reports
+        <span class="font-mono text-xs font-semibold text-slate-500">
+          {allArticles.length} Published Investigations
         </span>
       </div>
 
       <div class="grid gap-6 sm:grid-cols-2">
         {
-          gridArticles.map((article) => (
-            <article class="group flex flex-col justify-between border-2 border-[#141413] bg-[#FCFBF8] shadow-[4px_4px_0px_#141413]">
+          allArticles.map((article) => (
+            <article class="group flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
               <div>
                 <a
                   href={`/articles/${article.slug}`}
-                  class="relative block aspect-video overflow-hidden border-b-2 border-[#141413] bg-stone-900"
+                  class="relative block aspect-video overflow-hidden bg-slate-900"
                 >
                   <img
                     src={article.data.heroImage.src}
@@ -112,35 +183,47 @@ const gridArticles = allArticles.filter((a) => a.slug !== featuredArticle?.slug)
                     width={article.data.heroImage.width}
                     height={article.data.heroImage.height}
                     loading="lazy"
-                    class="h-full w-full object-cover"
+                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                   />
-                  <span class="absolute bottom-3 right-3 border border-[#141413] bg-[#FCFBF8] px-2.5 py-0.5 font-mono text-xs font-extrabold text-[#141413]">
+                  <span class="absolute bottom-3 right-3 rounded-lg bg-slate-900/90 px-2.5 py-1 font-mono text-xs font-extrabold text-white shadow">
                     {article.data.verdict.score.toFixed(1)}/10
                   </span>
                 </a>
 
                 <div class="p-5">
-                  <div class="mb-2 flex items-center gap-2 font-mono text-[11px] font-bold uppercase text-[#D9381E]">
+                  <div class="mb-2 flex items-center gap-2 font-mono text-[11px] font-bold uppercase text-rose-600">
                     <span>{article.data.category}</span>
-                    <span>·</span>
-                    <span>{article.data.readingTimeMinutes}m read</span>
+                    <span class="text-slate-300">·</span>
+                    <span class="text-slate-500">{article.data.readingTimeMinutes}m read</span>
                   </div>
-                  <h3 class="font-serif text-xl font-extrabold leading-snug text-[#141413] group-hover:text-[#D9381E]">
+                  <h3 class="font-serif text-xl font-extrabold leading-snug text-slate-900 group-hover:text-rose-600">
                     <a href={`/articles/${article.slug}`}>
                       {article.data.title}
                     </a>
                   </h3>
-                  <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-stone-700">
+                  <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-600">
                     {article.data.description}
                   </p>
+
+                  <!-- Clickable Article Tags -->
+                  <div class="mt-3 flex flex-wrap gap-1.5">
+                    {article.data.tags.slice(0, 3).map((tag) => (
+                      <a
+                        href={`/tags/${slugifyTag(tag)}`}
+                        class="rounded-md bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-medium text-slate-600 transition hover:bg-rose-100 hover:text-rose-700"
+                      >
+                        #{tag}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div class="flex items-center justify-between border-t border-stone-300 bg-[#EFECE4] px-5 py-3 font-mono text-[11px] text-stone-700">
+              <div class="flex items-center justify-between border-t border-slate-100 bg-slate-50/70 px-5 py-3 font-mono text-[11px] text-slate-600">
                 <span>{article.data.author.name}</span>
                 <a
                   href={`/articles/${article.slug}`}
-                  class="font-bold uppercase text-[#D9381E] hover:underline"
+                  class="font-bold uppercase text-rose-600 hover:underline"
                 >
                   Open Report →
                 </a>
@@ -201,7 +284,7 @@ const gridArticles = allArticles.filter((a) => a.slug !== featuredArticle?.slug)
 
     <!-- Right Sticky Sidebar Rail -->
     <aside class="lg:col-span-4">
-      <div class="sticky top-16 space-y-6">
+      <div class="sticky top-20 space-y-6">
         <AdSlot
           slotId="gam-home-sidebar-sticky-300x600"
           placement="sidebar-sticky"

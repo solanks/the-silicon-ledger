@@ -5,6 +5,7 @@ import QuickVerdict from '../components/QuickVerdict.astro';
 import PolarizedPoll from '../components/PolarizedPoll.astro';
 import AdSlot from '../components/AdSlot.astro';
 import SpecComparisonTable from '../components/SpecComparisonTable.astro';
+import { slugifyTag } from '../config/taxonomy';
 
 export interface Props {
   article: CollectionEntry<'articles'>;
@@ -55,45 +56,57 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
   verdictScore={verdict.score}
 >
   <article class="mx-auto max-w-7xl">
-    <!-- Draft / PR Preview Banner -->
     {
       draft && (
-        <div class="mb-6 flex flex-wrap items-center justify-between gap-3 border-2 border-[#141413] bg-[#FDECE9] px-4 py-3 text-xs text-[#141413]">
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-xs text-slate-900">
           <div class="flex items-center gap-2 font-mono font-bold">
-            <span class="bg-[#D9381E] px-2 py-0.5 text-[10px] uppercase text-white">
+            <span class="rounded bg-rose-600 px-2 py-0.5 text-[10px] uppercase text-white">
               DRAFT DESK
             </span>
             <span>
               Staged on branch <code class="font-bold">draft/{article.slug}</code> · Pending Spec Audit &amp; 10s Mobile Sign-Off
             </span>
           </div>
-          <span class="font-mono text-[11px] font-semibold text-[#B02A14]">
+          <span class="font-mono text-[11px] font-semibold text-rose-700">
             Lifecycle Hook Active
           </span>
         </div>
       )
     }
 
-    <!-- Editorial Article Header -->
-    <header class="mb-8 border-b-2 border-[#141413] pb-8">
-      <div class="mb-3 flex flex-wrap items-center gap-3 font-mono text-xs font-bold uppercase tracking-wider">
-        <span class="bg-[#D9381E] px-2.5 py-0.5 text-white">
+    <!-- Modern Editorial Article Header -->
+    <header class="mb-8 border-b border-slate-200 pb-8">
+      <div class="mb-3 flex flex-wrap items-center gap-2.5 font-mono text-xs font-bold uppercase tracking-wider">
+        <span class="rounded-lg bg-rose-600 px-3 py-1 text-white shadow-sm">
           {category}
         </span>
-        <span class="text-stone-600">
-          {readingTimeMinutes} min read
+        <span class="text-slate-500">
+          · {readingTimeMinutes} min read
         </span>
+        <!-- Top Clickable Tag Pills -->
+        <div class="flex flex-wrap items-center gap-1.5 pl-1">
+          {
+            tags.slice(0, 4).map((tag) => (
+              <a
+                href={`/tags/${slugifyTag(tag)}`}
+                class="rounded-md border border-slate-200 bg-white px-2 py-0.5 font-mono text-[11px] font-semibold normal-case text-slate-600 transition hover:border-rose-500 hover:text-rose-600"
+              >
+                #{tag}
+              </a>
+            ))
+          }
+        </div>
       </div>
 
       <h1
-        class="font-serif text-4xl font-extrabold leading-[1.08] tracking-tight text-[#141413] sm:text-5xl lg:text-[54px]"
+        class="font-serif text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl lg:text-[52px]"
       >
         {title}
       </h1>
 
       {
         subtitle && (
-          <p class="mt-4 max-w-4xl font-serif text-xl italic leading-relaxed text-stone-700 sm:text-2xl">
+          <p class="mt-4 max-w-4xl font-serif text-xl leading-relaxed text-slate-600 sm:text-2xl">
             {subtitle}
           </p>
         )
@@ -101,11 +114,11 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
 
       <!-- Author Byline & Timestamps -->
       <div
-        class="mt-6 flex flex-wrap items-center justify-between gap-4 border-y border-stone-300 bg-[#EFECE4] px-4 py-3"
+        class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
       >
         <div class="flex items-center gap-3">
           <div
-            class="flex h-10 w-10 items-center justify-center border border-[#141413] bg-[#141413] font-mono text-xs font-bold text-[#F7F4EE]"
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 font-mono text-xs font-bold text-white"
           >
             {
               author.name
@@ -118,24 +131,24 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
             <div class="flex items-center gap-2">
               <a
                 href={author.url}
-                class="font-sans text-sm font-bold text-[#141413] hover:text-[#D9381E]"
+                class="font-sans text-sm font-bold text-slate-900 hover:text-rose-600"
               >
                 {author.name}
               </a>
               <span
-                class="border border-stone-400 bg-[#F7F4EE] px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase text-stone-700"
+                class="rounded-md bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase text-slate-600"
               >
-                Hardware Testing Desk
+                Hardware Testing Lab
               </span>
             </div>
-            <div class="font-mono text-xs text-stone-600">{author.role}</div>
+            <div class="font-mono text-xs text-slate-500">{author.role}</div>
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-4 font-mono text-xs text-stone-600">
+        <div class="flex flex-wrap items-center gap-4 font-mono text-xs text-slate-500">
           <div>
             Filed:{' '}
-            <time datetime={pubDate.toISOString()} class="font-semibold text-[#141413]">
+            <time datetime={pubDate.toISOString()} class="font-semibold text-slate-900">
               {formattedPubDate}
             </time>
           </div>
@@ -143,7 +156,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
             updatedDate && (
               <div>
                 Updated:{' '}
-                <time datetime={updatedDate.toISOString()} class="font-semibold text-[#D9381E]">
+                <time datetime={updatedDate.toISOString()} class="font-semibold text-rose-600">
                   {formattedUpdatedDate}
                 </time>
               </div>
@@ -152,9 +165,9 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
         </div>
       </div>
 
-      <!-- High-Resolution 16:9 Hero Image (>=1200px wide for Google Discover) -->
-      <figure class="mt-6 border-2 border-[#141413] bg-[#FCFBF8]">
-        <div class="relative aspect-video w-full overflow-hidden bg-stone-900">
+      <!-- High-Resolution 16:9 Hero Image -->
+      <figure class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
+        <div class="relative aspect-video w-full overflow-hidden bg-slate-900">
           <img
             src={heroImage.src}
             alt={heroImage.alt}
@@ -164,18 +177,11 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
             decoding="async"
             class="h-full w-full object-cover"
           />
-          {
-            heroImage.focalCallout && (
-              <div class="absolute bottom-4 left-4 border-2 border-[#141413] bg-[#D9381E] px-3.5 py-1.5 font-mono text-xs font-bold uppercase text-white shadow-[3px_3px_0px_#141413]">
-                Teardown Callout: {heroImage.focalCallout}
-              </div>
-            )
-          }
         </div>
         {
           heroImage.caption && (
-            <figcaption class="border-t-2 border-[#141413] bg-[#EFECE4] px-4 py-2.5 font-mono text-xs text-stone-700">
-              <strong>Fig 1.</strong> {heroImage.caption}
+            <figcaption class="border-t border-slate-200 bg-slate-50 px-4 py-2.5 font-mono text-xs text-slate-600">
+              <strong>Lab Bench:</strong> {heroImage.caption}
             </figcaption>
           )
         }
@@ -186,18 +192,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
     <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
       <!-- Primary Article Column (8 cols) -->
       <div class="lg:col-span-8">
-        <!-- Quick Verdict / Pros & Cons at the top of every article template -->
-        <QuickVerdict title={title} verdict={verdict} />
-
-        <!-- Article MDX Body -->
-        <div
-          id="article-prose-body"
-          class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:font-extrabold prose-headings:text-[#141413] prose-p:text-[17px] prose-p:leading-[1.75] prose-p:text-[#141413] prose-a:font-semibold prose-a:text-[#D9381E] prose-strong:text-[#141413] prose-code:border prose-code:border-stone-300 prose-code:bg-[#EFECE4] prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-[#141413] prose-th:border prose-th:border-stone-400 prose-th:bg-[#EFECE4] prose-th:p-2.5 prose-td:border prose-td:border-stone-300 prose-td:p-2.5"
-        >
-          <slot />
-        </div>
-
-        <!-- Reader Poll below the article body -->
+        <!-- Above-the-Fold Polarized Two-Option Poll -->
         <PolarizedPoll
           pollId={article.slug}
           question={poll.question}
@@ -215,6 +210,17 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
           hotTakeAuthor={poll.hotTakeAuthor}
         />
 
+        <!-- Quick Verdict / Pros & Cons at the top of every article template -->
+        <QuickVerdict title={title} verdict={verdict} />
+
+        <!-- Article MDX Body -->
+        <div
+          id="article-prose-body"
+          class="prose prose-slate max-w-none prose-headings:font-serif prose-headings:font-extrabold prose-headings:text-slate-900 prose-p:text-[17px] prose-p:leading-[1.75] prose-p:text-slate-800 prose-a:font-semibold prose-a:text-rose-600 prose-strong:text-slate-900 prose-code:rounded prose-code:border prose-code:border-slate-200 prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-slate-900"
+        >
+          <slot />
+        </div>
+
         <!-- Optional Frontmatter-driven Spec Comparison Table -->
         {
           specComparison && (
@@ -228,16 +234,19 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
           )
         }
 
-        <!-- Article Tags Footer -->
-        <div class="mt-10 flex flex-wrap items-center gap-2 border-t-2 border-[#141413] pt-6">
-          <span class="font-mono text-xs font-bold uppercase tracking-wider text-stone-600">
-            Filed Under:
+        <!-- Clickable Article Tags Footer -->
+        <div class="mt-10 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-6">
+          <span class="font-mono text-xs font-bold uppercase tracking-wider text-slate-500">
+            Explore Related Topics:
           </span>
           {
             tags.map((tag) => (
-              <span class="border border-[#141413] bg-[#EFECE4] px-2.5 py-1 font-mono text-xs font-semibold text-[#141413]">
-                {tag}
-              </span>
+              <a
+                href={`/tags/${slugifyTag(tag)}`}
+                class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 font-mono text-xs font-semibold text-slate-700 shadow-sm transition hover:border-rose-500 hover:bg-rose-50 hover:text-rose-600"
+              >
+                #{tag}
+              </a>
             ))
           }
         </div>
@@ -245,8 +254,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
 
       <!-- Sticky Sidebar Rail (4 cols) -->
       <aside class="lg:col-span-4" aria-label="Sidebar & High-Viewability Ad Rail">
-        <div class="sticky top-16 space-y-6">
-          <!-- Sticky Sidebar Ad Slot (300x600 Half-Page Unit with 30s Active View Auto-Refresh) -->
+        <div class="sticky top-20 space-y-6">
           <AdSlot
             slotId="gam-sidebar-sticky-300x600"
             placement="sidebar-sticky"

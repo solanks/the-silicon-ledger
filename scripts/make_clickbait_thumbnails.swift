@@ -76,23 +76,57 @@ let specs: [ClickbaitSpec] = [
         calloutLabel: "VRAM CHOKED AT 1080P!",
         targetX: 1060,
         targetY: 440
+    ),
+    ClickbaitSpec(
+        filename: "anker-vs-ugreen-gan-charger-throttling-test.jpg",
+        topBanner: "ANKER VS UGREEN TRUTH!",
+        stampText: "65W THROTTLE?!",
+        calloutLabel: "98°C INSIDE AT 18 MIN!",
+        targetX: 1050,
+        targetY: 430
+    ),
+    ClickbaitSpec(
+        filename: "flagship-anc-earbuds-battery-degradation-test.jpg",
+        topBanner: "$299 EARBUD TRAP!",
+        stampText: "DEAD IN 14 MOS!",
+        calloutLabel: "GLUED 55mAh BATTERY!",
+        targetX: 1070,
+        targetY: 440
+    ),
+    ClickbaitSpec(
+        filename: "google-pixel-tensor-modem-battery-drain-test.jpg",
+        topBanner: "PIXEL 5G BATTERY DRAIN!",
+        stampText: "DEAD BY 3PM?!",
+        calloutLabel: "5G MODEM EATS 24% MORE!",
+        targetX: 1040,
+        targetY: 450
     )
 ]
 
 let fm = FileManager.default
 let dir = URL(fileURLWithPath: fm.currentDirectoryPath).appendingPathComponent("public/images/articles")
 
-// Copy a base photo for the new 8GB VRAM article if it doesn't exist yet
-let vramUrl = dir.appendingPathComponent("8gb-vram-gpu-obsolescence-trap-2026.jpg")
-let rtxUrl = dir.appendingPathComponent("rtx-5090-laptop-gpu.jpg")
-if !fm.fileExists(atPath: vramUrl.path) && fm.fileExists(atPath: rtxUrl.path) {
-    try? fm.copyItem(at: rtxUrl, to: vramUrl)
+let baseMapping: [(String, String)] = [
+    ("8gb-vram-gpu-obsolescence-trap-2026.jpg", "rtx-5090-laptop-gpu.jpg"),
+    ("anker-vs-ugreen-gan-charger-throttling-test.jpg", "day-one-firmware-beta-trap.jpg"),
+    ("flagship-anc-earbuds-battery-degradation-test.jpg", "media-traffic-heist.jpg"),
+    ("google-pixel-tensor-modem-battery-drain-test.jpg", "snapdragon-8-elite-vs-a18-pro.jpg")
+]
+
+var newlyCreated = Set<String>()
+for (newFile, sourceFile) in baseMapping {
+    let destUrl = dir.appendingPathComponent(newFile)
+    let srcUrl = dir.appendingPathComponent(sourceFile)
+    if !fm.fileExists(atPath: destUrl.path) && fm.fileExists(atPath: srcUrl.path) {
+        try? fm.copyItem(at: srcUrl, to: destUrl)
+        newlyCreated.insert(newFile)
+    }
 }
 
 let width: Int = 1600
 let height: Int = 900
 
-for spec in specs {
+for spec in specs where newlyCreated.contains(spec.filename) || CommandLine.arguments.contains("--all") {
     let fileUrl = dir.appendingPathComponent(spec.filename)
     guard let srcImage = NSImage(contentsOf: fileUrl) else {
         print("Skipping missing \(spec.filename)")

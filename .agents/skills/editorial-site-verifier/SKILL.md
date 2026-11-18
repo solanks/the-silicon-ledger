@@ -19,14 +19,11 @@ Use this skill when asked to verify published articles, source real images to re
   - No unintended `draft: true` on articles linked from the main navigation or homepage.
   - Complete Markdown/MDX formatting (no unclosed tags, broken tables, or raw HTML artifacts).
 
-### 2. Replace AI Diagrams & Circles with Real Photography
-- Never leave `.svg` diagram/circle graphics as article `heroImage.src` when a real photograph belongs there.
-- Remove `"Red Circle: ..."` or `"Diagram ..."` strings from `heroImage.focalCallout`, `heroImage.alt`, and `heroImage.caption`.
-- For each article needing a real photo:
-  1. Search Wikimedia Commons (or another free-to-use editorial source) for a high-resolution **landscape** photograph (`width >= 1200px`) matching the article's hardware/topic.
-  2. Download it locally to `public/images/articles/<slug>.jpg` (e.g., via `https://commons.wikimedia.org/wiki/Special:FilePath/<Filename>?width=1600`).
-  3. Verify with `file public/images/articles/<slug>.jpg` that it is a valid JPEG/PNG/WebP and landscape (`width >= 1200`, `width > height`).
-  4. Update the article's `heroImage.src`, `alt`, and `caption`, and remove `focalCallout` if it describes a diagram/circle.
+### 2. Rotate Image Designs & Evaluate Visual Similarity
+- Never use the same dark/neon AI template across articles. Rotate through distinct styles: bright daylight product photography, candid lab/workbench documentary photos, clean macro hardware shots, cool-toned infrastructure photos, and real photos with editorial overlays.
+- After posting or updating any image, **run the separate image-diversity test**:
+  `python3 scripts/verify_and_polish_site.py --check-image-diversity`
+- If any two images are flagged as visually or structurally similar (or if >50% of images are dark/low-key), **redo the offending image** using a contrasting visual style, lighting, or editorial overlay until `--check-image-diversity` passes.
 
 ### 3. Verify Formatting & Links
 - Eliminate all placeholder domains (`example.com`, `techpulse.example.com`) in `src/content/`, `src/pages/`, and `src/layouts/`.
