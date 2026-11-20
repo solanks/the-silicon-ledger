@@ -25,6 +25,7 @@ URLS_TO_INDEX = [
     f"{SITE_URL}/tags/mac/",
     f"{SITE_URL}/tags/ipad/",
     f"{SITE_URL}/tags/iphone/",
+    f"{SITE_URL}/articles/usb-c-cable-e-marker-wattage-speed-test/",
     f"{SITE_URL}/articles/thunderbolt-usb-c-dock-monitor-flicker-heat-test/",
     f"{SITE_URL}/articles/qi2-magsafe-power-bank-heat-efficiency-test/",
     f"{SITE_URL}/articles/ipad-pro-oled-vs-ipad-air-magic-keyboard-trap/",
