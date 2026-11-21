@@ -348,14 +348,36 @@ const { showTopLeaderboard = false, ...seoProps } = Astro.props;
         );
 
         adWrappers.forEach((el) => {
-          const ins = el.querySelector('ins.adsbygoogle');
-          if (ins && !ins.getAttribute('data-adsbygoogle-status')) {
+          const ins = el.querySelector<HTMLElement>('ins.adsbygoogle');
+          const fallback = el.querySelector<HTMLElement>('.ad-fallback-card');
+          if (!ins) return;
+
+          const syncAdFillState = () => {
+            const adStatus = ins.getAttribute('data-ad-status');
+            const hasFilledIframe =
+              adStatus === 'filled' ||
+              (ins.querySelector('iframe') !== null && ins.offsetHeight > 20);
+            if (hasFilledIframe && fallback) {
+              fallback.classList.add('hidden');
+            }
+          };
+
+          const observer = new MutationObserver(syncAdFillState);
+          observer.observe(ins, {
+            attributes: true,
+            childList: true,
+            subtree: true
+          });
+
+          if (!ins.getAttribute('data-adsbygoogle-status')) {
             try {
               ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
             } catch {
               // AdSense script will process queued slots once loaded
             }
           }
+
+          syncAdFillState();
         });
       }
 

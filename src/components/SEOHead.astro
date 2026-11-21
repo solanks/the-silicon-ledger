@@ -198,12 +198,13 @@ const newsArticleJsonLd = isArticle
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageUrl} />
 
-<!-- Google AdSense Auto-Loader (Activates automatically when PUBLIC_ADSENSE_CLIENT_ID is set) -->
+<!-- Google AdSense Auto-Loader (is:inline ensures AdSense crawler & Auto Ads run directly in <head>) -->
 {
   adsenseClientId && (
     <>
       <meta name="google-adsense-account" content={adsenseClientId} />
       <script
+        is:inline
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
         crossorigin="anonymous"

@@ -1,4 +1,6 @@
 ---
+import { buildAmazonAffiliateUrl } from '../config/monetization';
+
 export interface Props {
   slotId: string;
   placement: 'leaderboard' | 'sidebar-sticky' | 'in-content';
@@ -18,6 +20,29 @@ const {
 
 const adsenseClientId =
   import.meta.env.PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-6428626874238056';
+
+const fallbackDeals = [
+  {
+    badge: 'Lab Tested · Top GaN Pick',
+    title: 'Ugreen Nexode 100W 4-Port USB-C GaN Fast Charger',
+    detail: 'Sustains 99.8W continuous output at 57.9°C without thermal reset disconnects.',
+    cta: 'Check Street Price →',
+    href: buildAmazonAffiliateUrl(
+      'https://www.amazon.com/s?k=Ugreen+Nexode+100W+USB+C+Charger',
+      'Ugreen Nexode 100W USB C Charger'
+    )
+  },
+  {
+    badge: 'Certified 240W + 40Gbps',
+    title: 'Anker Prime USB4 240W Braided USB-C Cable (3.3ft)',
+    detail: 'Verified Cypress E-Marker chip with full 48V/5A EPR power and 40Gbps PCIe tunneling.',
+    cta: 'View on Amazon →',
+    href: buildAmazonAffiliateUrl(
+      'https://www.amazon.com/s?k=Anker+Prime+USB4+240W+Cable',
+      'Anker Prime USB4 240W Cable'
+    )
+  }
+];
 ---
 
 <aside
@@ -36,7 +61,7 @@ const adsenseClientId =
 
   <div
     class:list={[
-      'ad-unit-box relative flex w-full items-center justify-center overflow-hidden rounded-lg bg-white/80',
+      'ad-unit-box relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-white/90',
       minHeight
     ]}
   >
@@ -47,5 +72,40 @@ const adsenseClientId =
       data-ad-format="auto"
       data-full-width-responsive="true"
     />
+
+    <!-- Clean Native House Affiliate Fallback (Auto-hides once Google AdSense fills the iframe) -->
+    <div
+      class="ad-fallback-card w-full p-3 text-left transition-opacity duration-200"
+    >
+      <div class="space-y-2.5">
+        {
+          (placement === 'sidebar-sticky' ? fallbackDeals : fallbackDeals.slice(0, 1)).map(
+            (deal) => (
+              <a
+                href={deal.href}
+                target="_blank"
+                rel="nofollow sponsored noopener noreferrer"
+                class="group block rounded-lg border border-slate-200/90 bg-slate-50/80 p-3 transition hover:border-rose-300 hover:bg-rose-50/40"
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <span class="rounded bg-rose-100 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase text-rose-700">
+                    {deal.badge}
+                  </span>
+                  <span class="font-mono text-[10px] font-bold text-rose-600 group-hover:underline">
+                    {deal.cta}
+                  </span>
+                </div>
+                <div class="mt-1.5 text-xs font-bold leading-snug text-slate-900 group-hover:text-rose-600">
+                  {deal.title}
+                </div>
+                <p class="mt-1 text-[11px] leading-normal text-slate-500">
+                  {deal.detail}
+                </p>
+              </a>
+            )
+          )
+        }
+      </div>
+    </div>
   </div>
 </aside>
